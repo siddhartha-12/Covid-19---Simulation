@@ -9,32 +9,25 @@ class ConfigUtil:
     def __init__(self):
         self.defaultPath = str(os.getcwd())+"/config/config.cfg"
         self.cp= configparser.ConfigParser()
+        self.isloaded = False
         
     
     #Method to fetch the value based on the section and key passed.
-    def getValue(self,section, prop):
-        return self.cp[section][prop]
-    
-    def get_setting(self, section, setting):
-        try:        
+    def get_value(self, section, setting):
+        try:
+            if(not self.isloaded):
+                self.load_config()        
             ret = self.cp.get(section, setting)
         except configparser.NoOptionError:
             ret = None
         return ret
 
-    # method to check if the there is any data loaded    
-    def hasConfigData(self):
-        if(len(self.cp)>0):
-            return True
-        else:
-            return False
-
     # Method to load data   
-    def loadConfig(self):
+    def load_config(self):
         try:
             if (os.path.exists(self.defaultPath) and os.path.isfile(self.defaultPath)):            
                 self.cp.read(self.defaultPath)
-                print("loaded")
+                print("Config File loaded")
                 return True
             else:
                 print("Not loaded")
@@ -47,6 +40,5 @@ class ConfigUtil:
 
 if __name__ == "__main__":
     cu =  ConfigUtil()
-    cu.loadConfig()
     print(cu.cp.sections())
-    print(cu.get_setting("COVID19","name"))
+    print(cu.get_value("COVID19","name"))
