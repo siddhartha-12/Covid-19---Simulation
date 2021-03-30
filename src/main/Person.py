@@ -1,79 +1,105 @@
+from ConfigUtil import ConfigUtil
+import random as rd
+import numpy as np
+
+
 class Person :
     
     # Default constructor 
     def __init__(self):
-        self._age = None
-        self._gender = None
-        self._medical_history_scale = None
+        self.config = ConfigUtil.get_instance()
+        self.matrix = int(self.config.get_value("SIMULATION","population"))
+        self._x_cordinate = rd.randint(0, self.matrix) * 0.5
+        self._y_cordinate = rd.randint(0, self.matrix) * 0.5
+        self._age = rd.randint(1, 100)
+        self._gender = rd.choice(["M","F"])
+        self._medical_history_scale = rd.randint(11, 100)//10 #''' Medical history scale is vulnerability of immune system due to past illess. 1 being lowest and 5 being highest'''
         self._k_factor = None
         self._vaccinated = None
         self._asymtomatic = None
         self._qurantine = None
         self._mask_usage = None
         self._infected = None
-    # Parameterized contructor
-    def __init__(self,age,gender,medical_history_scale,k_factor,vaccinated,asymtomatic,qurantine,mask_usage,infected):
-        self._age = age
-        self._gender = gender
-        self._medical_history_scale = medical_history_scale
-        self._k_factor = k_factor
-        self._vaccinated = vaccinated
-        self._asymtomatic = asymtomatic
-        self._qurantine = qurantine
-        self._mask_usage = mask_usage
-        self._infected = infected
+    
+    # # Parameterized contructor
+    # def __init__(self,age,gender,medical_history_scale,k_factor,vaccinated,asymtomatic,qurantine,mask_usage,infected):
+    #     self.config = ConfigUtil.get_instance()
+    #     self.matrix = int(self.config.get_value("SIMULATION","population")) * 1.5
+    #     self._x_cordinate = rd.randint(0, self.matrix)
+    #     self._y_cordinate = rd.randint(0, self.matrix)
+    #     self._age = age
+    #     self._gender = gender
+    #     self._medical_history_scale = medical_history_scale
+    #     self._k_factor = k_factor
+    #     self._vaccinated = vaccinated
+    #     self._asymtomatic = asymtomatic
+    #     self._qurantine = qurantine
+    #     self._mask_usage = mask_usage
+    #     self._infected = infected
 
     # Getter and setter method for properties
     def get_age(self):
-        return _age
+        return self._age
 
     def set_age(self,age:int):
         self._age = age
     
+    def get_x(self):
+        return self._x_cordinate
+
+    def set_x(self,x:int):
+        self._x_cordinate = x
+    
+    def get_y(self):
+        return self._y_cordinate
+
+    def set_y(self,x:int):
+        self._y_cordinate = y
+    
     def get_gender(self):
-        return _gender
+        return self._gender
 
     def set_gender(self,gender:str):
         self._gender = gender
     
     def get_medical_history_scale(self):
-        return _medical_history_scale
+        return self._medical_history_scale
 
     def set_medical_history_scale(self,age:float):
         self._medical_history_scale = medical_history_scale
     
     def get_k_factor(self):
-        return _k_factor
+        return self._k_factor
 
     def set_k_factor(self,age:int):
         self._k_factor = k_factor
     
     def get_vaccinated(self):
-        return _vaccinated
+        return self._vaccinated
 
     def set_vaccinated(self,vaccinated:bool):
         self._vaccinated = vaccinated
     
     def get_asymtomatic(self):
-        return _asymtomatic
+        return self._asymtomatic
 
     def set_asymtomatic(self,asymtomatic:bool):
         self._asymtomatic = asymtomatic
 
     def get_qurantine(self):
-        return _qurantine
+        return self._qurantine
 
     def set_qurantine(self,qurantine:bool):
         self._qurantine = qurantine
 
     def get_mask_usage(self):
-        return _mask_usage
+        return self._mask_usage
 
     def set_mask_usage(self,mask_usage:bool):
         self._mask_usage = mask_usage
 
     def get_infected(self):
-        return _infected
+        return self._infected
 
     def set_infected(self,infected:bool):
         self._infected = infected
@@ -82,5 +108,10 @@ class Person :
 # Local toString method
 
     def __str__(self):
-        print( "age :" + self.get_age + "\n gender :" + self.get_gender + "\n medical_history_scale :" + self.medical_history_scale + "\n k_factor :" + self.get_k_factor + "\n vaccinated :" + self.get_vaccinated + "\n asymtomatic :" + self.get_asymtomatic + "\n qurantine :" + self.get_qurantine + "\n mask_usage :" + self.get_mask_usage + "\n age :" + self.get_infected + "\n age :" + self.get_infected
+        return( "\n X-cordinate :" + str(self.get_x()) + "\n Y-cordinate :" + str(self.get_y()) + "\n age :" + str(self.get_age()) + "\n gender :" + str(self.get_gender()) + "\n medical_history_scale :" + str(self.get_medical_history_scale()) + "\n k_factor :" + str(self.get_k_factor()) + "\n vaccinated :" + str(self.get_vaccinated()) + "\n asymtomatic :" + str(self.get_asymtomatic()) + "\n qurantine :" + str(self.get_qurantine()) + "\n mask_usage :" + str(self.get_mask_usage()) + "\n Infected :" + str(self.get_infected()) )
+         
 
+if __name__ == "__main__":
+    p = Person()
+    print(p.get_age())
+    print(p)
