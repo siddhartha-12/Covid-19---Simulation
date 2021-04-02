@@ -1,29 +1,34 @@
 from ConfigUtil import ConfigUtil
 import random as rd
 import numpy as np
+import uuid
 
 
 class Person :
     
     # Default constructor 
     def __init__(self):
+        self.id = uuid.uuid1()
         self.config = ConfigUtil.get_instance()
-        self.matrix = int(self.config.get_value("SIMULATION","population"))
-        self._x_cordinate = rd.randint(0, self.matrix) * 0.5
-        self._y_cordinate = rd.randint(0, self.matrix) * 0.5
+        matrix = int(self.config.get_value("SIMULATION","population"))
+        self._x_cordinate = rd.randint(0, matrix) 
+        self._y_cordinate = rd.randint(0, matrix) 
         self._age = rd.randint(1, 100)
         self._gender = rd.choice(["M","F"])
-        self._medical_history_scale = rd.randint(11, 100)//10 #''' Medical history scale is vulnerability of immune system due to past illess. 1 being lowest and 5 being highest'''
-        self._k_factor = None
-        self._vaccinated = None
-        self._asymtomatic = None
-        self._qurantine = None
-        self._mask_usage = None
-        self._infected = None
+        self._medical_history_scale = rd.randint(11, 109)//10 #''' Medical history scale is vulnerability of immune system due to past illess. 1 being poor healthy and 10 good health'''
+        self._k_factor = 0
+        self._vaccinated = False
+        self._asymtomatic = False
+        self._qurantine = False
+        self._mask_usage = False
+        self._infected = False
+        self._recovered = False
+        self._deceased = False
     
-    # # Parameterized contructor
+    # Parameterized contructor
     # def __init__(self,age,gender,medical_history_scale,k_factor,vaccinated,asymtomatic,qurantine,mask_usage,infected):
     #     self.config = ConfigUtil.get_instance()
+    #     self.id = uuid.uuid1()
     #     self.matrix = int(self.config.get_value("SIMULATION","population")) * 1.5
     #     self._x_cordinate = rd.randint(0, self.matrix)
     #     self._y_cordinate = rd.randint(0, self.matrix)
@@ -38,6 +43,12 @@ class Person :
     #     self._infected = infected
 
     # Getter and setter method for properties
+    def get_id(self):
+        return self._age
+
+    def set_id(self,age:int):
+        self._age = age
+    
     def get_age(self):
         return self._age
 
@@ -103,15 +114,35 @@ class Person :
 
     def set_infected(self,infected:bool):
         self._infected = infected
+    
+    def get_recovered(self):
+        return self._recovered
+
+    def set_recovered(self,recovered:bool):
+        self._recovered = recovered
+
+    def get_deceased(self):
+        return self._deceased
+
+    def set_deceased(self,deceased:bool):
+        self._deceased = deceased
        
 
 # Local toString method
 
     def __str__(self):
-        return( "\n X-cordinate :" + str(self.get_x()) + "\n Y-cordinate :" + str(self.get_y()) + "\n age :" + str(self.get_age()) + "\n gender :" + str(self.get_gender()) + "\n medical_history_scale :" + str(self.get_medical_history_scale()) + "\n k_factor :" + str(self.get_k_factor()) + "\n vaccinated :" + str(self.get_vaccinated()) + "\n asymtomatic :" + str(self.get_asymtomatic()) + "\n qurantine :" + str(self.get_qurantine()) + "\n mask_usage :" + str(self.get_mask_usage()) + "\n Infected :" + str(self.get_infected()) )
+        return( "\n ID :" + str(self.get_id()) + "\n X-cordinate :" + str(self.get_x()) + "\n Y-cordinate :" + str(self.get_y()) + "\n age :" + str(self.get_age()) + "\n gender :" + str(self.get_gender()) + "\n medical_history_scale :" + 
+        str(self.get_medical_history_scale()) + "\n k_factor :" + str(self.get_k_factor()) + "\n vaccinated :" 
+        + str(self.get_vaccinated()) + "\n asymtomatic :" + str(self.get_asymtomatic()) + "\n qurantine :" 
+        + str(self.get_qurantine()) + "\n mask_usage :" + str(self.get_mask_usage()) + "\n Infected :" 
+        + str(self.get_infected()) + "\n Recovered :" + str(self.get_recovered()) + "\n Deceased :" + str(self.get_deceased()))
          
 
 if __name__ == "__main__":
-    p = Person()
-    print(p.get_age())
-    print(p)
+    persons=[]
+
+    for _ in range(1):
+        persons.append(Person())
+    
+    for i in persons:
+       print (i)
