@@ -3,7 +3,6 @@ import configparser
 import os
 import logging
 
-
 class ConfigUtil:
     _instance = None
     logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=logging.DEBUG)
