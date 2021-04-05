@@ -64,7 +64,7 @@ class Person :
     def get_y(self):
         return self._y_cordinate
 
-    def set_y(self,x:int):
+    def set_y(self,y:int):
         self._y_cordinate = y
     
     def get_gender(self):
@@ -76,13 +76,13 @@ class Person :
     def get_medical_history_scale(self):
         return self._medical_history_scale
 
-    def set_medical_history_scale(self,age:float):
+    def set_medical_history_scale(self,medical_history_scale:float):
         self._medical_history_scale = medical_history_scale
     
     def get_k_factor(self):
         return self._k_factor
 
-    def set_k_factor(self,age:int):
+    def set_k_factor(self,k_factor:int):
         self._k_factor = k_factor
     
     def get_vaccinated(self):
