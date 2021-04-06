@@ -49,6 +49,9 @@ class SimalationData():
     def updateStore(self, person_obj, old_x, old_y, new_x, new_y):
         self.store[int(old_x/50)][int(old_y/50)].remove(person_obj)
         self.store[int(new_x/50)][int(new_y/50)].append(person_obj)
+    
+    def getStoreMatrix(self):
+        return self.store
 
     def movement(self):
         population_total = int(self.config.get_value('SIMULATION','POPULATION'))
