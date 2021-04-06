@@ -34,7 +34,22 @@ class SimalationData():
         return personDataset
 
     def movement(self):
-        pass #take motivation from infect_initial
+        population_total = int(self.config.get_value('SIMULATION','POPULATION'))
+        number_to_move = np.random.randint(int(population_total*0.05),int(population_total*0.075))
+        movement_index = np.random.choice(population_total,number_to_move)
+        toss =[-3,-2,-1,1,2,3]
+        for i in movement_index:
+            old_x = self.population_set[i].get_x()
+            old_y = self.population_set[i].get_y()
+            new_x = old_x + toss[np.random.randint(0,6)]
+            new_y = old_y + toss[np.random.randint(0,6)]
+            #update store matrix if needed
+            if new_x <=1000 and new_y<=1000 and new_x >=0 and new_y>=0:
+
+                self.population_set[i].set_x(new_x)
+                self.population_set[i].set_y(new_y)
+            #print(old_x, self.population_set[i].get_x(),"\n")
+        return self.population_set
 
 if __name__=="__main__":
     du = SimalationData()
