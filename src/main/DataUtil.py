@@ -73,7 +73,7 @@ class DataUtil:
                 count +=1
         return count
 
-    def getInfectionProbability(self,disease,health_scale:int,maskFactor:bool,quarantineFactor:bool)-> bool:
+    def getInfectionStatus(self,disease,health_scale:int,maskFactor:bool,quarantineFactor:bool)-> bool:
         
         if(health_scale<1):
             health_scale = 1
@@ -104,10 +104,10 @@ class DataUtil:
         return result
 
     def testInfectionProbability(self,health_scale):
-        print("Result Mask Present | Quarantine Absent   ----" + str(self.getInfectionProbability("COVID19", 8, True, False)))
-        print("Result Mask Absent  | Quarantine Present  ----" + str(self.getInfectionProbability("COVID19", 8, False, True)))
-        print("Result Mask Absent  | Quarantine Absent   ----" + str(self.getInfectionProbability("COVID19", 8, False, False)))
-        print("Result Mask Present | Quarantine Present  ----" + str(self.getInfectionProbability("COVID19", 8, True, True)))
+        print("Result Mask Present | Quarantine Absent   ----" + str(self.getInfectionStatus("COVID19", 8, True, False)))
+        print("Result Mask Absent  | Quarantine Present  ----" + str(self.getInfectionStatus("COVID19", 8, False, True)))
+        print("Result Mask Absent  | Quarantine Absent   ----" + str(self.getInfectionStatus("COVID19", 8, False, False)))
+        print("Result Mask Present | Quarantine Present  ----" + str(self.getInfectionStatus("COVID19", 8, True, True)))
 
 if __name__=="__main__":
     du = DataUtil()
