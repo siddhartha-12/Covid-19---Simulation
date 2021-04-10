@@ -46,12 +46,6 @@ class Person :
 
     # Getter and setter method for properties
     
-    def get_deceased(self):
-        return self._deceased
-
-    def set_deceased(self,deceased:bool):
-        self._deceased = deceased
-    
     def get_recoveryDays(self):
         return self._recoveryDays
 
