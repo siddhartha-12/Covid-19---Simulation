@@ -24,6 +24,8 @@ class Person :
         self._infected = False
         self._recovered = False
         self._deceased = False
+        self._recoveryDays = -1
+        
     
     # Parameterized contructor
     # def __init__(self,age,gender,medical_history_scale,k_factor,vaccinated,asymtomatic,qurantine,mask_usage,infected):
@@ -43,6 +45,19 @@ class Person :
     #     self._infected = infected
 
     # Getter and setter method for properties
+    
+    def get_deceased(self):
+        return self._deceased
+
+    def set_deceased(self,deceased:bool):
+        self._deceased = deceased
+    
+    def get_recoveryDays(self):
+        return self._recoveryDays
+
+    def set_id(self,recoveryDays:int):
+        self._recoveryDays = recoveryDays
+    
     def get_id(self):
         return self._age
 
