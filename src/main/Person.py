@@ -25,27 +25,17 @@ class Person :
         self._recovered = False
         self._deceased = False
         self._recoveryDays = -1
+        self._can_infect = 0
         
-    
-    # Parameterized contructor
-    # def __init__(self,age,gender,medical_history_scale,k_factor,vaccinated,asymtomatic,qurantine,mask_usage,infected):
-    #     self.config = ConfigUtil.get_instance()
-    #     self.id = uuid.uuid1()
-    #     self.matrix = int(self.config.get_value("SIMULATION","population")) * 1.5
-    #     self._x_cordinate = rd.randint(0, self.matrix)
-    #     self._y_cordinate = rd.randint(0, self.matrix)
-    #     self._age = age
-    #     self._gender = gender
-    #     self._medical_history_scale = medical_history_scale
-    #     self._k_factor = k_factor
-    #     self._vaccinated = vaccinated
-    #     self._asymtomatic = asymtomatic
-    #     self._qurantine = qurantine
-    #     self._mask_usage = mask_usage
-    #     self._infected = infected
 
     # Getter and setter method for properties
     
+    def get_can_infect(self):
+        return self._can_infect
+
+    def set_can_infect(self,can_infect:int):
+        self._can_infect = recoveryDays
+
     def get_recoveryDays(self):
         return self._recoveryDays
 
