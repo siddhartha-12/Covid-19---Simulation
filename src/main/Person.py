@@ -49,7 +49,7 @@ class Person :
     def get_recoveryDays(self):
         return self._recoveryDays
 
-    def set_id(self,recoveryDays:int):
+    def set_recoveryDays(self,recoveryDays:int):
         self._recoveryDays = recoveryDays
     
     def get_id(self):
