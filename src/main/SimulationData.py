@@ -10,7 +10,7 @@ class SimalationData():
         logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=logging.DEBUG)
         self.config = ConfigUtil.get_instance()
 
-    def intialData(self)-> list:
+    def getDataset(self)-> list:
         if(self.population_set is None):
             return self.generateDataset()
         return self.population_set
@@ -74,9 +74,9 @@ class SimalationData():
 
 if __name__=="__main__":
     du = SimalationData()
-    for i in du.intialData():
+    for i in du.getDataset():
         print (i)
-    du.createStoreMatrix() #or we can call this in the intialData() funcion
+    # du.createStoreMatrix() #or we can call this in the intialData() funcion
 
 
         
