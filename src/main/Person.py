@@ -1,18 +1,17 @@
-from ConfigUtil import ConfigUtil
+from Config import Config
 import random as rd
 import numpy as np
-import uuid
-
 
 class Person :
     
     # Default constructor 
-    def __init__(self):
-        self.id = uuid.uuid1()
-        self.config = ConfigUtil.get_instance()
-        matrix = int(self.config.get_value("SIMULATION","population"))
-        self._x_cordinate = rd.randint(0, matrix) 
-        self._y_cordinate = rd.randint(0, matrix) 
+    def __init__(self,id):
+        self._id = id
+        self.config = Config.get_instance()
+        matrix = self.config.get_population()
+        population = int(matrix if matrix else 10)
+        self._x_cordinate = rd.randint(0, population) 
+        self._y_cordinate = rd.randint(0, population) 
         self._age = rd.randint(1, 100)
         self._gender = rd.choice(["M","F"])
         self._medical_history_scale = rd.randint(11, 109)//10 #''' Medical history scale is vulnerability of immune system due to past illess. 1 being poor healthy and 10 good health'''
@@ -43,10 +42,10 @@ class Person :
         self._recoveryDays = recoveryDays
     
     def get_id(self):
-        return self._age
+        return self._id
 
     def set_id(self,age:int):
-        self._age = age
+        self._id = id
     
     def get_age(self):
         return self._age
@@ -140,8 +139,8 @@ class Person :
 if __name__ == "__main__":
     persons=[]
 
-    for _ in range(1):
-        persons.append(Person())
-    
+    for i in range(5):
+        persons.append(Person(i))
+
     for i in persons:
-       print (i)
+       print (i.get_id())
