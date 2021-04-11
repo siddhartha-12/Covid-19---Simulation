@@ -29,8 +29,8 @@ class SimalationData():
 
     def initializePersonDataset(self,popualation: int)-> list:
         personDataset = list()
-        for _ in range(popualation):
-            personDataset.append(Person())
+        for i in range(popualation):
+            personDataset.append(Person(i))
         return personDataset
 
     def createStoreMatrix(self):
