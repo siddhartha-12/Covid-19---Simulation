@@ -34,6 +34,7 @@ class Config:
         self._vaccine_introduced_timeline =    None
         self._vaccine_effectiveness =          None
         self._vaccine_usage_percentage =       None
+        self._total_to_infect =                None        
  
     def get_property_name(self):
         return self._property_name
@@ -71,8 +72,6 @@ class Config:
     def set_days_contageous(self,days_contageous:int):
         self._days_contageous = days_contageous
 
-
-
     def get_mask_introduced_timeline(self):
         return self._mask_introduced_timeline
 
@@ -90,9 +89,6 @@ class Config:
 
     def set_mask_usage_percentage(self,mask_usage_percentage:int):
         self._mask_usage_percentage = mask_usage_percentage
-
-
-
 
     def get_quarantine_introduced_timeline(self):
         return self._quarantine_introduced_timeline
@@ -112,9 +108,6 @@ class Config:
     def set_qurantine_usage_percentage(self,qurantine_usage_percentage:int):
         self._qurantine_usage_percentage = qurantine_usage_percentage        
 
-
-
-
     def get_vaccine_introduced_timeline(self):
         return self._vaccine_introduced_timeline
 
@@ -132,6 +125,13 @@ class Config:
 
     def set_vaccine_usage_percentage(self,vaccine_usage_percentage:int):
         self._vaccine_usage_percentage = vaccine_usage_percentage        
+
+    def get_total_to_infect(self):
+        return self._total_to_infect
+
+    def set_total_to_infect(self,total_to_infect:int):
+        self._total_to_infect = total_to_infect        
+
 
 
         
