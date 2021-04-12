@@ -1,4 +1,5 @@
 import logging
+from ConfigUtil import ConfigUtil
 
 class Config:
     __instance = None
@@ -130,18 +131,42 @@ class Config:
         return self._total_to_infect
 
     def set_total_to_infect(self,total_to_infect:int):
-        self._total_to_infect = total_to_infect        
+        self._total_to_infect = total_to_infect   
 
+    def __str__(self):
+        return("\n Property Name: "+str(self.get_property_name())+"\n Population: "+str(self.get_population())
+                +"\n Initial Infected Percentage: "+ str(self.get_initial_infected_percentage())+"\n R-Factor: "+ str(self.get_r_factor())
+                +"\n K-Factor: "+ str(self.get_k_factor())+"\n Days Contageous: "+ str(self.get_days_contageous())
+                +"\n Mask Usage Effectiveness: "+ str(self.get_mask_usage_effectiveness())+"\n Quarantine Timeline: "+str(self.get_quarantine_introduced_timeline())
+                +"\n Qurantine Effectiveness: "+ str(self.get_qurantine_effectiveness())+"\n Vaccine Timeline: "+str(self.get_vaccine_introduced_timeline())
+                +"\n Vaccine Effectiveness: "+ str(self.get_vaccine_effectiveness())+"\n")
 
+    def update_to_infect(self):
+        self.set_total_to_infect(self.get_total_to_infect() + self.get_r_factor())
+    
+    def update_to_infect(self,number):
+        self.set_total_to_infect(self.get_total_to_infect() + self.get_r_factor())
 
-        
-    # def __str__(self):
-    #     return("\n Property Name: "+str(self.get_property_name())+"\n Population: "+str(self.get_population())
-    #             +"\n Initial Infected Percentage: "+ str(self.get_initial_infected_percentage())+"\n R-Factor: "+ str(self.get_r_factor())
-    #             +"\n K-Factor: "+ str(self.get_k_factor())+"\n Days Contageous: "+ str(self.get_days_contageous())
-    #             +"\n Mask Usage Effectiveness: "+ str(self.get_mask_usage_effectiveness())+"\n Quarantine Timeline: "+str(self.get_quarantine_introduced_timeline())
-    #             +"\n Qurantine Effectiveness: "+ str(self.get_qurantine_effectiveness())+"\n Vaccine Timeline: "+str(self.get_vaccine_introduced_timeline())
-    #             +"\n Vaccine Effectiveness: "+ str(self.get_vaccine_effectiveness())+"\n")
+    def load_from_file(self,disease_section):
+        cu = ConfigUtil()
+        self.set_property_name(disease_section)
+        self.set_population(int(cu.get_value("SIMULATION","population")))
+        self.set_initial_infected_percentage(int(cu.get_value("SIMULATION","initial_infected_percentage")))
+        self.set_r_factor(int(cu.get_value(disease_section,"r_factor")))
+        self.set_k_factor(int(cu.get_value(disease_section,"k_factor")))
+        self.set_days_contageous(int(cu.get_value(disease_section,"days_contageous")))
+        self.set_mask_introduced_timeline(int(cu.get_value(disease_section,"mask_timeline")))
+        self.set_mask_usage_effectiveness(int(cu.get_value(disease_section,"mask_usuage_percentage")))
+        self.set_mask_usage_percentage(int(cu.get_value(disease_section,"mask_usuage_percentage")))
+        self.set_quarantine_introduced_timeline(int(cu.get_value(disease_section,"quarantine_timeline")))
+        self.set_qurantine_effectiveness(int(cu.get_value(disease_section,"qurantine_effectiveness")))
+        self.set_qurantine_usage_percentage(int(cu.get_value(disease_section,"qurantine_percentage")))
+        self.set_vaccine_introduced_timeline(int(cu.get_value(disease_section,"vaccine_timeline")))
+        self.set_vaccine_effectiveness(int(cu.get_value(disease_section,"vaccine_effectiveness")))
+        self.set_vaccine_usage_percentage(int(cu.get_value(disease_section,"vaccinated_percentage")))
+        to_be_infected = int(self.get_r_factor()) * (int(self.get_population())*int(self.get_initial_infected_percentage())/100)
+        self.set_total_to_infect(to_be_infected)
+
 
 if __name__=="__main__":
 
