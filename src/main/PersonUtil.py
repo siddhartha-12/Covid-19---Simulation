@@ -5,9 +5,21 @@ import numpy as np
 
 
 class PersonUtil:
-    cu = Config()
-    def updatePerson(self, person: Person, time: int) -> Person:
-        
+
+    cu = Config.get_instance()
+    
+    def updatePerson(self, ContaminationContact:bool,person: Person, time: int) -> Person:
+        quo =False
+        if(ContaminationContact):
+            result = self.getInfectionStatus(person.get_medical_history_scale(), person.get_mask_usage(), person.get_qurantine())
+            spread_infection = self.check_will_spread()
+            if result and spread_infection:
+                self.cu.update_to_infect()
+                person.set_infected(result)
+                can_infect = np.random.randint(0,self.cu.get_total_to_infect()/2)
+                person.set_can_infect(can_infect)
+                quo =True
+
         # Update movement for the person
         if not person.get_qurantine():
             x, y = self.updateMovement(person.get_x(), person.get_y())
@@ -41,7 +53,7 @@ class PersonUtil:
             if not vaccinated:
                 person.set_mask_usage(self.updateMak())
 
-        return person
+        return person,quo
 
     # Method to update the x and y coordinates of the person
     def updateMovement(self, x: int, y: int):
@@ -57,24 +69,24 @@ class PersonUtil:
         p_medical_history = float(medical_history_scale)/10
         probability_of_survival = (0.95 * p_medical_history)/10
         result = np.random.choice(
-            True, False, p=[probability_of_survival, 1-probability_of_survival])
+            [True, False], p=[probability_of_survival, 1-probability_of_survival])
         return result, not result
 
     #Method to update if the mask status quo will change for the person
     def updateMak(self) -> bool:
         if(status):
-            status = np.random.choice(True,False,p = [0.7,0.1])
+            status = np.random.choice([True,False],p = [0.7,0.1])
         else:
-            status = np.random.choice(np.random.choice(True,False,p = [0.7,0.3]))
+            status = np.random.choice(np.random.choice([True,False],p = [0.7,0.3]))
         return status
     
     #Method to update if the quarantine status quo will change for the person
     def updateQuarantine(self,status:bool) -> bool:
         
         if(status):
-            status = np.random.choice(True,False,p = [0.7,0.1])
+            status = np.random.choice([True,False],p = [0.7,0.1])
         else:
-            status = np.random.choice(np.random.choice(True,False,p = [0.5,0.5]))
+            status = np.random.choice(np.random.choice([True,False],p = [0.5,0.5]))
         return status
     
     #Method to update if the vaccine status quo will change for the person
@@ -85,7 +97,7 @@ class PersonUtil:
         low_percentage = float(low)
         high_percentage = float(high)
         probability_of_vaccine = float(np.random.randint(low,high)) / 100
-        status = np.random.choice(True,False,p = [probability_of_vaccine,1-probability_of_vaccine])
+        status = np.random.choice([True,False],p = [probability_of_vaccine,1-probability_of_vaccine])
         return status
 
     #Method to update if the person will get infected or not
@@ -95,7 +107,6 @@ class PersonUtil:
             health_scale = 1
         if(health_scale>10):
             health_scale =10
-
         if(maskFactor):
             maskEffectivenessFactor  =  int(self.cu.get_mask_usage_effectiveness())
             maskEffectivenessLowerLimit = (maskEffectivenessFactor - 10) if (maskEffectivenessFactor - 10) >=0 else 0
@@ -124,3 +135,26 @@ class PersonUtil:
         print("Result Mask Absent  | Quarantine Present  ----" + str(self.getInfectionStatus("COVID19", 8, False, True)))
         print("Result Mask Absent  | Quarantine Absent   ----" + str(self.getInfectionStatus("COVID19", 8, False, False)))
         print("Result Mask Present | Quarantine Present  ----" + str(self.getInfectionStatus("COVID19", 8, True, True)))
+
+    def check_will_spread(self)-> bool:
+        k = float(self.cu.get_k_factor())
+        if k>=1:
+            k = .99
+        elif k<0:
+            k =0.01
+        result =  np.random.choice([True,False], p = [k,1-k])
+        return result
+
+if __name__=="__main__":
+    cu = Config.get_instance()
+    cu.load_from_file("COVID19")
+    pu = PersonUtil()
+    f1 = 0
+    f2 = 0
+    for i in range(1000):
+        if pu.check_will_spread():
+            f1 +=1
+        else:
+            f2 +=1
+    print("True ",str(f1),"\nFalse ",str(f2))
+
