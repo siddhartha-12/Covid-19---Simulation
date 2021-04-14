@@ -36,6 +36,7 @@ class PersonUtil:
                     person.get_medical_history_scale())
                 person.set_deceased(demise)
                 person.set_recovered(recovered)
+                person.set_infected(not recovered)
         
         # Check if quarantine has been introduced or not and check if the person will quarantine or not
         if self.cu.get_quarantine_introduced_timeline() > time:
@@ -125,7 +126,6 @@ class PersonUtil:
             totalEffectiveProbability = (quarantineEffectiveness * health_scale) / 1000
         else:
             totalEffectiveProbability = (health_scale) / 100
-        print(totalEffectiveProbability)
         sampleList = [False,True]
         result = np.random.choice(sampleList,p=[totalEffectiveProbability,1-totalEffectiveProbability])
         return result
