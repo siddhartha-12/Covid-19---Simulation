@@ -31,7 +31,7 @@ class PersonUtil:
             r_days = person.get_recoveryDays()
             if r_days != 0:
                 person.set_recoveryDays(r_days-1)
-            elif r_day == 0:
+            elif r_days == 0:
                 recovered, demise = self.updateDemiseOrRecovered(
                     person.get_medical_history_scale())
                 person.set_deceased(demise)
@@ -43,7 +43,7 @@ class PersonUtil:
             if self.updateQuarantine(qurantine) != qurantine:
                 person.set_qurantine(not qurantine)
         # Check if mask has been introduced or not and check if the person will wear mask or not
-        if self.cu.get_mask_introduced_timeline > time:
+        if self.cu.get_mask_introduced_timeline() > time:
             mask = person.get_mask_usage()
             if self.updateMak(mask) != mask:
                 person.set_mask_usage(not mask)
@@ -51,7 +51,7 @@ class PersonUtil:
         if self.cu.get_vaccine_introduced_timeline() > time:
             vaccinated = person.get_vaccinated()
             if not vaccinated:
-                person.set_mask_usage(self.updateMak())
+                person.set_vaccinated(vaccinated)
 
         return person,quo
 
@@ -73,20 +73,20 @@ class PersonUtil:
         return result, not result
 
     #Method to update if the mask status quo will change for the person
-    def updateMak(self) -> bool:
+    def updateMak(self,status) -> bool:
         if(status):
-            status = np.random.choice([True,False],p = [0.7,0.1])
+            status = np.random.choice([True,False],1,p = [0.7,0.3])
         else:
-            status = np.random.choice(np.random.choice([True,False],p = [0.7,0.3]))
+            status = np.random.choice(np.random.choice([True,False],1,p = [0.7,0.3]))
         return status
     
     #Method to update if the quarantine status quo will change for the person
     def updateQuarantine(self,status:bool) -> bool:
-        
+        frame = [True,False]
         if(status):
-            status = np.random.choice([True,False],p = [0.7,0.1])
+            status = np.random.choice(frame,1,p = [0.7,0.3])
         else:
-            status = np.random.choice(np.random.choice([True,False],p = [0.5,0.5]))
+            status = np.random.choice(np.random.choice(frame,1,p = [0.5,0.5]))
         return status
     
     #Method to update if the vaccine status quo will change for the person
@@ -94,9 +94,9 @@ class PersonUtil:
         usuage = self.cu.get_vaccine_usage_percentage()
         low_usuage = usuage-30 if usuage-30>0 else 0
         high_usuage = usuage+30 if usuage<100 else 100
-        low_percentage = float(low)
-        high_percentage = float(high)
-        probability_of_vaccine = float(np.random.randint(low,high)) / 100
+        low_percentage = float(low_usuage)
+        high_percentage = float(high_usuage)
+        probability_of_vaccine = float(np.random.randint(low_usuage,high_usuage)) / 100
         status = np.random.choice([True,False],p = [probability_of_vaccine,1-probability_of_vaccine])
         return status
 
@@ -111,12 +111,12 @@ class PersonUtil:
             maskEffectivenessFactor  =  int(self.cu.get_mask_usage_effectiveness())
             maskEffectivenessLowerLimit = (maskEffectivenessFactor - 10) if (maskEffectivenessFactor - 10) >=0 else 0
             maskEffectivenessUpperLimit = (maskEffectivenessFactor + 10) if (maskEffectivenessFactor + 10) <=100 else 100
-            maskEffectiveness = random.randint(maskEffectivenessLowerLimit,maskEffectivenessUpperLimit )
+            maskEffectiveness = np.random.randint(maskEffectivenessLowerLimit,maskEffectivenessUpperLimit )
         if(quarantineFactor):
             quarantineEffectivenessFactor  =  int(self.cu.get_qurantine_effectiveness())
             quarantineEffectivenessLowerLimit = (quarantineEffectivenessFactor - 10) if (quarantineEffectivenessFactor - 10) >=0 else 0
             quarantineEffectivenessUpperLimit = (quarantineEffectivenessFactor + 10) if (quarantineEffectivenessFactor + 10) <=100 else 100
-            quarantineEffectiveness = random.randint(quarantineEffectivenessLowerLimit,quarantineEffectivenessUpperLimit )
+            quarantineEffectiveness = np.random.randint(quarantineEffectivenessLowerLimit,quarantineEffectivenessUpperLimit )
         if maskFactor and quarantineFactor:
             totalEffectiveProbability = (maskEffectiveness * quarantineEffectiveness * health_scale) / 100000
         elif maskFactor:
@@ -127,7 +127,7 @@ class PersonUtil:
             totalEffectiveProbability = (health_scale) / 100
         print(totalEffectiveProbability)
         sampleList = [False,True]
-        result = choice(sampleList,p=[totalEffectiveProbability,1-totalEffectiveProbability])
+        result = np.random.choice(sampleList,p=[totalEffectiveProbability,1-totalEffectiveProbability])
         return result
 
     def testInfectionProbability(self,health_scale):

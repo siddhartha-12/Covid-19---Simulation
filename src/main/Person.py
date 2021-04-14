@@ -33,7 +33,7 @@ class Person :
         return self._can_infect
 
     def set_can_infect(self,can_infect:int):
-        self._can_infect = recoveryDays
+        self._can_infect = can_infect
 
     def get_recoveryDays(self):
         return self._recoveryDays

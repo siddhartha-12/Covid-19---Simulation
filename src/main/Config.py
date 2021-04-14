@@ -11,7 +11,7 @@ class Config:
             Config()
         return Config.__instance
 
-    def __init__(self):     
+    def __init__(self):
         
         if Config.__instance != None:
             logging.info("This is a singleton class. Use get_instance method")
@@ -103,7 +103,7 @@ class Config:
     def set_qurantine_effectiveness(self,qurantine_effectiveness:int):
         self._qurantine_effectiveness = qurantine_effectiveness        
 
-    def get__qurantine_usage_percentage(self):
+    def get_qurantine_usage_percentage(self):
         return self._qurantine_usage_percentage
 
     def set_qurantine_usage_percentage(self,qurantine_usage_percentage:int):
@@ -144,7 +144,7 @@ class Config:
     def update_to_infect(self):
         self.set_total_to_infect(self.get_total_to_infect() + self.get_r_factor())
     
-    def update_to_infect(self,number):
+    def update_to_infect_number(self,number):
         self.set_total_to_infect(self.get_total_to_infect() + self.get_r_factor())
 
     def load_from_file(self,disease_section):
@@ -153,10 +153,10 @@ class Config:
         self.set_population(int(cu.get_value("SIMULATION","population")))
         self.set_initial_infected_percentage(int(cu.get_value("SIMULATION","initial_infected_percentage")))
         self.set_r_factor(int(cu.get_value(disease_section,"r_factor")))
-        self.set_k_factor(int(cu.get_value(disease_section,"k_factor")))
+        self.set_k_factor(float(cu.get_value(disease_section,"k_factor")))
         self.set_days_contageous(int(cu.get_value(disease_section,"days_contageous")))
         self.set_mask_introduced_timeline(int(cu.get_value(disease_section,"mask_timeline")))
-        self.set_mask_usage_effectiveness(int(cu.get_value(disease_section,"mask_usuage_percentage")))
+        self.set_mask_usage_effectiveness(int(cu.get_value(disease_section,"mask_usuage_effectiveness")))
         self.set_mask_usage_percentage(int(cu.get_value(disease_section,"mask_usuage_percentage")))
         self.set_quarantine_introduced_timeline(int(cu.get_value(disease_section,"quarantine_timeline")))
         self.set_qurantine_effectiveness(int(cu.get_value(disease_section,"qurantine_effectiveness")))
