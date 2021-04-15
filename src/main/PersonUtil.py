@@ -10,6 +10,7 @@ class PersonUtil:
     
     def updatePerson(self, ContaminationContact:bool,person: Person, time: int) -> Person:
         quo =False
+        
         if(ContaminationContact):
             result = self.getInfectionStatus(person.get_medical_history_scale(), person.get_mask_usage(), person.get_qurantine())
             spread_infection = self.check_will_spread()
@@ -19,6 +20,7 @@ class PersonUtil:
                 can_infect = np.random.randint(0,self.cu.get_total_to_infect()/2)
                 person.set_can_infect(can_infect)
                 quo =True
+                
 
         # Update movement for the person
         if not person.get_qurantine():
@@ -29,9 +31,12 @@ class PersonUtil:
         # Update recovery days or demise status if the person is infected
         if person.get_infected():
             r_days = person.get_recoveryDays()
-            if r_days != 0:
+            print(r_days)
+            if r_days > 0:
+                print("-------------entered recovery remission")
                 person.set_recoveryDays(r_days-1)
-            elif r_days == 0:
+            elif r_days <= 0:
+                print("------------------------------------------------entered recovery")
                 recovered, demise = self.updateDemiseOrRecovered(
                     person.get_medical_history_scale())
                 person.set_deceased(demise)
@@ -58,8 +63,8 @@ class PersonUtil:
 
     # Method to update the x and y coordinates of the person
     def updateMovement(self, x: int, y: int):
-        step_x = np.random.randint(-5, 5)
-        step_y = np.random.randint(-5, 5)
+        step_x = np.random.randint(-5, 6)
+        step_y = np.random.randint(-5, 6)
         new_x = x + step_x
         new_y = y + step_y
         return new_x, new_y
@@ -70,7 +75,7 @@ class PersonUtil:
         p_medical_history = float(medical_history_scale)/10
         probability_of_survival = (0.95 * p_medical_history)/10
         result = np.random.choice(
-            [True, False], p=[probability_of_survival, 1-probability_of_survival])
+            [True, False],1, p=[probability_of_survival, 1-probability_of_survival])
         return result, not result
 
     #Method to update if the mask status quo will change for the person
@@ -85,10 +90,8 @@ class PersonUtil:
     def updateQuarantine(self,status:bool) -> bool:
         frame = [True,False]
         if(status):
-            status = np.random.choice(frame,1,p = [0.7,0.3])
-        else:
-            status = np.random.choice(np.random.choice(frame,1,p = [0.5,0.5]))
-        return status
+            statusupdate = np.random.choice(frame,1,p = [0.6,0.4])
+        return (status and statusupdate)
     
     #Method to update if the vaccine status quo will change for the person
     def updateVaccination(self):

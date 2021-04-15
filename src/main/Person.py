@@ -133,7 +133,7 @@ class Person :
         str(self.get_medical_history_scale()) + "\n k_factor :" + str(self.get_k_factor()) + "\n vaccinated :" 
         + str(self.get_vaccinated()) + "\n asymtomatic :" + str(self.get_asymtomatic()) + "\n qurantine :" 
         + str(self.get_qurantine()) + "\n mask_usage :" + str(self.get_mask_usage()) + "\n Infected :" 
-        + str(self.get_infected()) + "\n Recovered :" + str(self.get_recovered()) + "\n Deceased :" + str(self.get_deceased()))
+        + str(self.get_infected()) + "\n Recovered :" + str(self.get_recovered()) + "\n Can Infect :" + str(self.get_can_infect()) + "\n Deceased :" + str(self.get_deceased()))
          
 
 if __name__ == "__main__":
