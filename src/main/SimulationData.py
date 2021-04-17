@@ -28,7 +28,8 @@ class SimalationData():
         for i in infect_index:
             self.population_set[i].set_infected(True)
             self.population_set[i].set_can_infect(self.config.get_r_factor())
-            self.population_set[i].set_recoveryDays(self.config.get_days_contageous())
+            self.config.update_to_infect()
+            self.population_set[i].set_recoveryDays(np.random.random_integers(3,self.config.get_days_contageous()+3))
 
     def initializePersonDataset(self,popualation: int)-> list:
         personDataset = list()
@@ -39,8 +40,11 @@ class SimalationData():
     
 if __name__=="__main__":
     du = SimalationData()
+    initial_infect = 0
     for i in du.getDataset():
-        print (i)
+        if i.get_infected():
+            initial_infect+=1
+    print(initial_infect,len(du.generateDataset()))
     # du.createStoreMatrix() #or we can call this in the intialData() funcion
 
 

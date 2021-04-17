@@ -261,7 +261,6 @@ class ConfigurationPanel(tk.Frame):
 
         try:
             population = int(self.txtPopulation.get(1.0,"end-1c"))
-            print(population)
             conf.set_population(population)
             
         except:
@@ -270,7 +269,6 @@ class ConfigurationPanel(tk.Frame):
 
         try:
             daysContagious = int(self.txtDaysContagious.get(1.0,"end-1c"))
-            print(daysContagious)
             conf.set_days_contageous(daysContagious)
         except:
             flag=1
@@ -278,7 +276,6 @@ class ConfigurationPanel(tk.Frame):
 
         try:
             initialInfectedPer = int(self.txtInitialInfectedPer.get(1.0,"end-1c"))
-            print(initialInfectedPer)
             conf.set_initial_infected_percentage(initialInfectedPer)
         except:
             flag=1
@@ -286,7 +283,6 @@ class ConfigurationPanel(tk.Frame):
 
         try:
             maskIntroducedTimeline = int(self.txtMaskIntroducedTimeline.get(1.0,"end-1c"))
-            print(maskIntroducedTimeline)
             conf.set_mask_introduced_timeline(maskIntroducedTimeline)
         except:
             flag=1
@@ -294,7 +290,6 @@ class ConfigurationPanel(tk.Frame):
 
         try:
             quarantineIntroducedTimeline = int(self.txtQuarantineIntroducedTimeline.get(1.0,"end-1c"))
-            print(quarantineIntroducedTimeline)
             conf.set_quarantine_introduced_timeline(quarantineIntroducedTimeline)
         except:
             flag=1
@@ -302,7 +297,6 @@ class ConfigurationPanel(tk.Frame):
 
         try:
             vaccineIntroducedTimeline = int(self.txtVaccineIntroducedTimeline.get(1.0,"end-1c"))
-            print(vaccineIntroducedTimeline)
             conf.set_vaccine_effectiveness(vaccineIntroducedTimeline)
         except:
             flag=1
@@ -317,128 +311,220 @@ class ConfigurationPanel(tk.Frame):
 
 class StartPanel(tk.Frame):
 
-    def __init__(self, parent, controller):
-        self.sd = SimalationData()
-        self.du = DataUtil()
-        self.sd.getDataset()
-        self.pu = PersonUtil()
-        self.time =0
+    def __init__(self, parent, controller):        
+        self.cont = controller
+        self.dots_graph = None
+        self.lineCanvas = None
+        self.lgCanvas = None
+       
+
+        self.infected_log = np.array([])
+        self.healthy_log = np.array([])
+        self.recovered_log = np.array([])
+        self.deceased_log = np.array([])
+
+        self.xlimit = 100
+        self.ylimit = 0
+
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Simulation", font=LARGE_FONT)
-        label.pack(pady=10,padx=10) 
-        btnBack = ttk.Button(self, text = "<< back", command=lambda: controller.show_frame(DefaultPanel))
+        label.pack(pady=10,padx=10)
+        
+        self.timer_name = tk.Label(self,text="Timer")
+        self.timer_name.place(x=150,y=200)
+        self.timer_label = tk.Label(self, text="")
+        self.timer_label.place(x=200,y=200)
+        self.no_of_infected = tk.Label(self,text="No. of Infected")
+        self.no_of_infected.place(x=100,y=250)
+
+        
+
+        btnBack = ttk.Button(self, text = "<< back", command=self.backOnClick)
         btnBack.place(x=20, y=80)
+
+        btnSim = ttk.Button(self, text = "Simulate", command=self.startSim)
+        btnSim.place(x=950, y=330)
+        
+    def backOnClick(self):
+        self.cont.show_frame(DefaultPanel)
+        self.cancel_oval()
+        self.cancel_line()
+        self.cancel_lg()
+
+    def startSim(self):
+        
+        self.cancel_line()
+        self.cancel_oval()
+        self.lineCanvas= None
+
+
+        self.cu = Config.get_instance()
+        self.sd = SimalationData()
+        self.du = DataUtil()
+        self.dataset = self.sd.getDataset()
+        self.pu = PersonUtil()
+        self.time =0
+        self.infected_location_dict = dict()
+        self.ylimit = self.cu.get_population()
+
         self.canvass = tk.Canvas(self,height=300, width = 500,background='white')
         self.canvass.place(x=300,y=50)
-        self.lineCanvas = tk.Canvas(self,height =300, width =500, background ='white')
-        self.lineCanvas.place(x=300, y=450)
-        self.dataset = self.sd.getDataset()
-        infectedDS = self.du.getLocationInfected(self.dataset)
-        healthyDS =  self.du.getLocationHealthy(self.dataset)
-        self.infectedxlist=infectedDS[0]
-        self.infectedylist=infectedDS[1]
-        self.healthyXlist = healthyDS[0]
-        self.healthyYlist = healthyDS[1]
-        self.x_delta=list()
-        self.y_delta=list()
-        self.infected_length = len(self.infectedxlist)
-        self.healthy_lenght = len(self.healthyXlist)
 
-        # for i in range(self.infected_length):
-        #     # self.xlist.append(np.random.randint(5,495))
-        #     # self.ylist.append(np.random.randint(5,295))
-        #     self.x_delta.append(1)
-        #     self.y_delta.append(0.7)
 
-        # for i in range(self.healthy_lenght):
-        #     # self.xlist.append(np.random.randint(5,495))
-        #     # self.ylist.append(np.random.randint(5,295))
-        #     self.x_delta.append(1)
-        #     self.y_delta.append(0.7)
+        #--------- time series graph ------------
+        self.fig = Figure()
+        self.ax = self.fig.add_subplot(111)
+       
+        self.ax.set_title('Time series graph')
+        self.ax.set_xlabel('Time')
+        self.ax.set_ylabel('No of people')
+        self.ax.set_xlim(0,self.xlimit)
+        self.ax.set_ylim(0,self.ylimit)
         
-        self.dotlist1=list()
-        for i in range(1000):
-            self.dotlist1.append(0)
-        self.dotlist2=list()
-        for i in range(1000):
-            self.dotlist2.append(0)
-        # self.prevy=0
-        # for i in range(self.infected_length):
-        #     self.dotlist.append(self.canvass.create_oval(self.infectedxlist[i]-4,self.infectedylist[i]-4,self.infectedxlist[i]+4,self.infectedylist[i]+4, fill='red'))
-        # for i in range(self.healthy_lenght):
-        #     self.dotlist.append(self.canvass.create_oval(self.healthyXlist[i]-4,self.healthyYlist[i]-4,self.healthyXlist[i]+4,self.healthyYlist[i]+4, fill='blue'))
-        
+       
+        self.lines = self.ax.plot([],[],'r')[0]
+
+        self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
+        self.lineCanvas.get_tk_widget().place(x=50,y=420, width = 500,height = 300)
+        self.lineCanvas.draw()
+
+        #--------- log graph ------------
+
+        self.fig_lg = Figure()
+        self.ax_lg = self.fig_lg.add_subplot(111)
+       
+
+        self.ax_lg.set_title('Logarithmic graph')
+        self.ax_lg.set_xlabel('Time')
+        self.ax_lg.set_ylabel('Log og no of people')
+        self.ax_lg.set_xlim(0,self.xlimit)
+        self.ax_lg.set_ylim(0,np.log(self.ylimit))
+       
+        self.lines_lg = self.ax_lg.plot([],[],'r')[0]
+
+        self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
+        self.lgCanvas.get_tk_widget().place(x=600,y=420, width = 500,height = 300)
+        self.lgCanvas.draw()
+
+
         self.move_oval()
-        # self.create_line()
+    
+    def add_infected_to_dict(self,x,y,id):
+        if (x,y) in self.infected_location_dict:
+            oid = self.infected_location_dict[(x,y)]
+            old = int(self.dataset[oid].get_can_infect())
+            new = int(self.dataset[id].get_can_infect())
+            if new>old:
+                self.infected_location_dict[x,y] = id
+        else:
+            self.infected_location_dict[x,y] = id
+ 
+    
+    def createCluster(self,x,y,id):
+        self.add_infected_to_dict(x, y, id)
+        self.add_infected_to_dict(x-1, y-1, id)
+        self.add_infected_to_dict(x-1, y, id)
+        self.add_infected_to_dict(x-1, y+1, id)
+        self.add_infected_to_dict(x, y+1, id)
+        self.add_infected_to_dict(x, y-1, id)
+        self.add_infected_to_dict(x+1, y-1, id)
+        self.add_infected_to_dict(x+1, y, id)
+        self.add_infected_to_dict(x+1, y+1, id)
 
-        
-    # def create_line(self):
-        
-    #     for i in range(490):
-    #         self.lineCanvas.create_line(i,300-(self.prevy),i+1,300-(i*i), width=3,fill ='red')
-    #         self.prevy=i*i
+    def cancel_oval(self):
+        if self.dots_graph is not None:
+            self.canvass.after_cancel(self.dots_graph)
+            self.dots_graph = None
+           
 
-    #     self.lineCanvas.after(10,create_line)
-        
-
+    def cancel_line(self):
+        if self.lineCanvas is not None:
+            self.lineCanvas.close_event()
+            self.infected_log=np.array([])
+            self.healthy_log=np.array([])
+            self.recovered_log=np.array([])
+            self.deceased_log = np.array([])
 
     def move_oval(self):
-        # for i in range(self.infected_length):
-        #     chance=np.random.randint(0,100)
-        #     if chance>90:
-        #         kx=np.random.random()*np.random.choice([-1,1])
-        #         if kx>0.5 or kx<-0.5:
-        #             self.x_delta[i] = kx
-        #         ky=np.random.random()*np.random.choice([-1,1])
-        #         if ky>0.5 or ky<-0.5:
-        #             self.y_delta[i] = ky
-        #     if self.xlist[i]+self.x_delta[i]<0 or self.xlist[i]+self.x_delta[i]>500:
-        #         self.x_delta[i]*=-1
-        #     if self.ylist[i]+self.y_delta[i]<0 or self.ylist[i]+self.y_delta[i]>300:
-        #         self.y_delta[i]*=-1
-        #     self.xlist[i]+=self.x_delta[i]
-        #     self.ylist[i]+=self.y_delta[i]
+        self.canvass.delete('all')
+
         self.time += 1
-        for i in self.dataset:
-            i = self.pu.updatePerson(True,i,self.time)[0]
+        self.canvass.delete('all')
+        #Repopulating infected zones
+        locations = self.du.getLocationInfected(self.dataset)
+        for x,y,z in zip(locations[0],locations[1],locations[2]):
+            self.createCluster(x, y, z)
+
+        #Updating status for every person
+        for i in range(len(self.dataset)):
+            if not self.dataset[i].get_deceased():
+                if not self.dataset[i].get_recovered() and not self.dataset[i].get_infected() and not self.dataset[i].get_vaccinated():
+                    x,y = self.dataset[i].get_x(), self.dataset[i].get_y()
+                    if (x,y) in self.infected_location_dict:
+                        self.dataset[i],quo = self.pu.updatePerson(True, self.dataset[i],self.time)
+                        if(quo):
+                            got_infected_from = self.infected_location_dict[(x,y)]
+                            self.dataset[got_infected_from].set_can_infect(self.dataset[got_infected_from].get_can_infect()-1)
+                    else:
+                         self.dataset[i] = self.pu.updatePerson(False,self.dataset[i],self.time)[0]
+                # elif self.dataset[i].get_infected() and not self.dataset[i].get_vaccinated():
+                #     # if self.dataset[i].get_can_infect() > 0:
+                #     #     self.createCluster( self.dataset[i].get_x(), self.dataset[i].get_y(), self.dataset[i].get_id())
+                else:
+                    self.dataset[i] = self.pu.updatePerson(False, self.dataset[i],self.time)[0]
+
+        counts  = self.du.getTotalCountAll(self.dataset)
+
             
+        # infectedDS = self.du.getLocationInfected(self.dataset)
+        # healthyDS =  self.du.getLocationHealthy(self.dataset)
+        # self.infectedxlist=infectedDS[0]
+        # self.infectedylist=infectedDS[1]
+        # self.healthyXlist = healthyDS[0]
+        # self.healthyYlist = healthyDS[1]
+        # self.infected_length = len(self.infectedxlist)
+        # self.healthy_lenght = len(self.healthyXlist)
+        self.timer_label.config(text="Time : " + str(int(self.time)))
+        self.no_of_infected.config(text="Infected  :" +str(counts["Infected"]) +"\nSuper Spreader : " + str(counts["Super"]) + "\nRecovered  :" +str(counts["Recover"]) + "\nDeceased  :" +str(counts["Dead"]) +"\nHealthy : " + str(counts["Healthy"]) + "\nMask Usage  :" +str(counts["Mask"]) + "\nQuarantined  :" +str(counts["Quarantine"]) +"\nVaccinated : " + str(counts["Vaccinate"]) +"\nPredicted more infection: " + str(int(self.cu.get_total_to_infect())) )
+        for i in range(len(self.dataset)):
+            if(self.dataset[i].get_infected()):
+                if(self.dataset[i].get_can_infect()>0):
+                    c='orange'
+                else:
+                    c='red'
+            else:
+                c='blue'
+            if(self.dataset[i].get_recovered()):
+                c='green'
+            if(self.dataset[i].get_deceased()):
+                c="black"
+            self.canvass.create_oval(self.dataset[i].get_x()/2-4,self.dataset[i].get_y()/3-4,self.dataset[i].get_x()/2+4,self.dataset[i].get_y()/3+4, fill = c)
         
-        infectedDS = self.du.getLocationInfected(self.dataset)
-        healthyDS =  self.du.getLocationHealthy(self.dataset)
-        
-
-        self.infectedxlist=infectedDS[0]
-        self.infectedylist=infectedDS[1]
-
-        self.healthyXlist = healthyDS[0]
-        self.healthyYlist = healthyDS[1]
-
-        self.x_delta=list()
-        self.y_delta=list()
-
-        self.infected_length = len(self.infectedxlist)
-        self.healthy_lenght = len(self.healthyXlist)
-        
-        for i in range(self.infected_length):
-            self.canvass.delete(self.dotlist1[i])
-            self.dotlist1[i]=self.canvass.create_oval(self.infectedxlist[i]-4,self.infectedylist[i]-4,self.infectedxlist[i]+4,self.infectedylist[i]+4, fill='red')
-            
-        for i in range(self.healthy_lenght):
-            self.canvass.delete(self.dotlist2[i])
-            self.dotlist2[i]=self.canvass.create_oval(self.healthyXlist[i]-4,self.healthyYlist[i]-4,self.healthyXlist[i]+4,self.healthyYlist[i]+4, fill='blue')
-
-            # self.canvass.move(self.dotlist[i],1,1)
-            # self.canvass.move(self.dotlist[i],self.x_delta[i],self.y_delta[i])
-            #self.canvass.itemconfig(self.dotlist[i],fill='green')
-            #print(self.xlist[i]," ,",self.ylist[i])
-            #print(self.x_delta[i],",",self.y_delta[i],np.random.randint(4))
-            # print(DefaultFrame.popo,np.random.randint(4))
-
-        
-        self.canvass.after(10,self.move_oval)
+        if self.time == self.xlimit:
+            self.xlimit *=2
+            self.ax_lg.set_xlim(0, self.xlimit)
+            self.ax.set_xlim(0,self.xlimit)
+        # self.infected_count = self.du.getTotalCountInfected(self.sd.getDataset())
+        # self.healthy_count = self.du.getTotalCountHealthy(self.sd.getDataset())
+        # self.recovered_count = self.du.getTotalCountRecovered(self.sd.getDataset())
 
 
+        self.infected_log = np.append(self.infected_log,counts["Infected"])
+        self.healthy_log = np.append(self.healthy_log, counts["Healthy"])
+        self.recovered_log = np.append(self.recovered_log, counts["Recover"])
+
+        self.ax.plot(np.arange(0,self.time),self.infected_log,'r',label ='Infected')[0]
+        self.ax.plot(np.arange(0,self.time),self.healthy_log,'b')[0]
+        self.ax.plot(np.arange(0,self.time),self.recovered_log,'g')[0]
+        # self.ax.legend(["Infected","Healthy","Recovered"])
+        self.lineCanvas.draw()
+
+        self.ax_lg.plot(np.arange(0,self.time),np.log(self.infected_log),'r')[0]
+        # self.ax.plot(np.arange(0,self.time),self.healthy_log,'g-')[0]
+        self.lgCanvas.draw()
+
+        self.canvass.after(100,self.move_oval)
 
 window = DefaultFrame()
-window.geometry('1000x1000')
+window.geometry('1150x1500')
 window.mainloop()

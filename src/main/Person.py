@@ -10,8 +10,8 @@ class Person :
         self.config = Config.get_instance()
         matrix = self.config.get_population()
         population = int(matrix if matrix else 10)
-        self._x_cordinate = rd.randint(0, population) 
-        self._y_cordinate = rd.randint(0, population) 
+        self._x_cordinate = rd.randint(0, 1000) 
+        self._y_cordinate = rd.randint(0, 1000) 
         self._age = rd.randint(1, 100)
         self._gender = rd.choice(["M","F"])
         self._medical_history_scale = rd.randint(11, 109)//10 #''' Medical history scale is vulnerability of immune system due to past illess. 1 being poor healthy and 10 good health'''

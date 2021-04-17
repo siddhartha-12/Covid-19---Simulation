@@ -145,10 +145,10 @@ class Config:
         self.set_total_to_infect(self.get_total_to_infect() + self.get_r_factor())
     
     def update_to_infect_number(self,number):
-        self.set_total_to_infect(self.get_total_to_infect() + self.get_r_factor())
+        self.set_total_to_infect(self.get_total_to_infect() + number)
 
     def load_from_file(self,disease_section):
-        cu = ConfigUtil()
+        cu = ConfigUtil.get_instance()
         self.set_property_name(disease_section)
         self.set_population(int(cu.get_value("SIMULATION","population")))
         self.set_initial_infected_percentage(int(cu.get_value("SIMULATION","initial_infected_percentage")))

@@ -16,11 +16,13 @@ class DataUtil:
     def getLocationInfected(self,personDataset:list) -> list:
         x_coordinate  = list()
         y_coordinate = list()
+        id_list = list()
         for i in personDataset:
-            if i.get_infected():
+            if i.get_infected() and i.get_can_infect()>0 and not i.get_deceased():
                 x_coordinate.append(i.get_x())
                 y_coordinate.append(i.get_y())
-        return [x_coordinate,y_coordinate]
+                id_list.append(i.get_id())
+        return [x_coordinate,y_coordinate,id_list]
     
     def getLocationHealthy(self,personDataset:list) -> list:
         x_coordinate  = list()
@@ -101,15 +103,16 @@ class DataUtil:
                 count +=1
         return count
 
-    def getTotalCountAll(self,personDataset:list) -> dict:
-        count = 0 
+    def getTotalCountAll(self,personDataset:list) -> dict: 
         count_dict = defaultdict(int)
         for i in personDataset:
             if i.get_infected():
                 count_dict["Infected"] +=1
-            if i.get_can_infect()>0:
+            if not i.get_infected() and not i.get_deceased():
+                count_dict["Healthy"] +=1
+            if i.get_infected() and i.get_can_infect()>0:
                 count_dict["Super"] +=1
-            if i.get_recovered():
+            if i.get_recovered() and not i.get_deceased():
                 count_dict["Recover"] +=1
             if i.get_deceased():
                 count_dict["Dead"] +=1
