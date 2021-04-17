@@ -32,7 +32,7 @@ class ConfigTest(unittest.TestCase):
 		self.assertEqual(int(self.person.get_id()), 0)
 	
 	def testGender(self):
-		self.assertTrue(self.person.get_gender()=="M" or self.person.get_gender()=="F")
+		self.assertTrue(self.person.get_gender()=="M" or self.person.get_gender()=="F") 
 
 	def checkFalseValues(self):
 		self.assertFalse(self.person.get_vaccinated())
