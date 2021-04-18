@@ -5,12 +5,11 @@ import numpy as np
 
 
 class PersonUtil:
-
     cu = Config.get_instance()
-    
     def updatePerson(self, ContaminationContact:bool,person: Person, time: int) -> Person:
         quo =False
         if(not person.get_deceased()):
+            #Update whether a person would get infected or not when he/she comes in contact with an infected person
             if(ContaminationContact):
                 result = self.getInfectionStatus(person.get_medical_history_scale(), person.get_mask_usage(), person.get_qurantine())
                 spread_infection = self.check_will_spread()
@@ -21,9 +20,10 @@ class PersonUtil:
                         self.cu.update_to_infect()
                         person.set_can_infect(can_infect)
                     person.set_infected(True)
-                    person.set_recoveryDays(np.random.random_integers(self.cu.get_days_contageous()))
+                    recovery_time_min = self.cu.get_days_contageous() - 20 if self.cu.get_days_contageous() - 20>0 else self.cu.get_days_contageous()
+                    recovery_time_max = self.cu.get_days_contageous() + 30
+                    person.set_recoveryDays(np.random.random_integers(recovery_time_min,recovery_time_max))
                     quo =True
-                    
 
             # Update movement for the person
             if not person.get_qurantine():
@@ -38,26 +38,22 @@ class PersonUtil:
                     updated_rday = r_days-1 if r_days -1>0 else 0
                     person.set_recoveryDays(updated_rday)
                 elif r_days <= 0:
-                    recovered, demise = self.updateDemiseOrRecovered(
-                        person.get_medical_history_scale())
+                    demise = self.updateDemiseOrRecovered(person.get_medical_history_scale())
                     person.set_deceased(demise)
-                    person.set_recovered(recovered)
+                    person.set_recovered(not demise)
                     person.set_infected(False)
 
-            
             # Check if quarantine has been introduced or not and check if the person will quarantine or not
-            if self.cu.get_quarantine_introduced_timeline() > time:
+            if self.cu.get_quarantine_introduced_timeline() < time:
                 qurantine = person.get_qurantine()
                 person.set_qurantine(self.updateQuarantine(qurantine))
             # Check if mask has been introduced or not and check if the person will wear mask or not
-            if self.cu.get_mask_introduced_timeline() > time:
+            if self.cu.get_mask_introduced_timeline() < time:
                 mask = person.get_mask_usage()
                 person.set_mask_usage(self.updateMak(mask))
             # Check if vaccine has been introduced or not and check if the person will get vaccinated or not
-            if self.cu.get_vaccine_introduced_timeline() > time and not person.get_vaccinated():
-                vaccinated = person.get_vaccinated()
-                if not vaccinated:
-                    person.set_vaccinated(vaccinated)
+            if self.cu.get_vaccine_introduced_timeline() < time and not person.get_vaccinated() and not person.get_deceased() and not person.get_infected():
+                    person.set_vaccinated(self.updateVaccination())
         else:
             person.set_infected(False)
             person.set_qurantine(False)
@@ -76,10 +72,9 @@ class PersonUtil:
     #Method to check if the peson will recover from the disease or loose his life
     def updateDemiseOrRecovered(self, medical_history_scale):
         # How much vulnerable is the person to die based on past medical history
-        p_medical_history = float(medical_history_scale)/100
-        probability_of_death = (p_medical_history)
-        result = np.random.choice([True, False],1, p=[1-probability_of_death, probability_of_death])
-        return result[0], not result[0]
+        p_medical_history = float(medical_history_scale)/10
+        result_death = np.random.choice([True, False],1, p=[1-p_medical_history, p_medical_history])
+        return result_death[0]
 
     #Method to update if the mask status quo will change for the person
     def updateMak(self,status) -> bool:
@@ -102,10 +97,10 @@ class PersonUtil:
     #Method to update if the vaccine status quo will change for the person
     def updateVaccination(self):
         usuage = self.cu.get_vaccine_usage_percentage()
-        low_usuage = usuage-30 if usuage-30>0 else 0
-        high_usuage = usuage+30 if usuage<100 else 100
-        low_percentage = float(low_usuage)
-        high_percentage = float(high_usuage)
+        if(int(usuage)==0):
+            return False
+        low_usuage = usuage-10 if usuage-10>0 else 0
+        high_usuage = usuage+10 if usuage<100 else 100
         probability_of_vaccine = float(np.random.randint(low_usuage,high_usuage)) / 100
         status = np.random.choice([True,False],1,p = [probability_of_vaccine,1-probability_of_vaccine])
         return status[0]
@@ -160,11 +155,11 @@ if __name__=="__main__":
     pu = PersonUtil()
     f1 = 0
     f2 = 0
-    for i in range(1000):
-        print(pu.updateVaccination())
-        if pu.check_will_spread():
+    for i in range(100):
+        a=pu.updateVaccination()
+        if a:
             f1 +=1
         else:
             f2 +=1
-    print(f1,f2)
+    print("True : "+ str(f1) + " False : "+ str(f2))
 

@@ -105,6 +105,7 @@ class DataUtil:
 
     def getTotalCountAll(self,personDataset:list) -> dict: 
         count_dict = defaultdict(int)
+        count_dict["Total"] = len(personDataset)
         for i in personDataset:
             if i.get_infected():
                 count_dict["Infected"] +=1
