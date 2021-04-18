@@ -43,5 +43,4 @@ class ConfigTest(unittest.TestCase):
 		self.assertFalse(self.person.get_deceased())
 
 if __name__ == "__main__":
-	#import sys;sys.argv = ['', 'Test.testName']
 	unittest.main()
