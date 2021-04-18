@@ -340,6 +340,10 @@ class StartPanel(tk.Frame):
         self.healthy_log = np.array([])
         self.recovered_log = np.array([])
         self.deceased_log = np.array([])
+        self.super_log = np.array([])
+        self.mask_log = np.array([])
+        self.quarantine_log = np.array([])
+        self.vaccine_log = np.array([])
         self.time_log = np.array([])
 
         self.xlimit = 100
@@ -356,7 +360,46 @@ class StartPanel(tk.Frame):
         self.no_of_infected = tk.Label(self,text="No. of Infected")
         self.no_of_infected.place(x=100,y=250)
 
-        
+        #---------- radio buttons ------------
+        self.infected_box=tk.BooleanVar()
+        self.infected_box.set(True)
+        self.checkInfected = tk.Checkbutton(self,text='Infected', var=self.infected_box,onvalue=1,offvalue=0)
+        self.checkInfected.place(x=950,y=80)
+
+        self.healthy_box=tk.BooleanVar()
+        self.healthy_box.set(True)
+        self.checkHealthy = tk.Checkbutton(self,text='Healthy', var=self.healthy_box,onvalue=1,offvalue=0)
+        self.checkHealthy.place(x=950,y=110)
+
+        self.recovered_box=tk.BooleanVar()
+        self.recovered_box.set(True)
+        self.checkRecovered = tk.Checkbutton(self,text='Recovered', var=self.recovered_box,onvalue=1,offvalue=0)
+        self.checkRecovered.place(x=950,y=140)
+
+        self.dead_box=tk.BooleanVar()
+        self.dead_box.set(True)
+        self.checkDead = tk.Checkbutton(self,text='Dead', var=self.dead_box,onvalue=1,offvalue=0)
+        self.checkDead.place(x=950,y=170)
+
+        self.super_box=tk.BooleanVar()
+        self.super_box.set(True)
+        self.checkSuper = tk.Checkbutton(self,text='Super Spreader', var=self.super_box,onvalue=1,offvalue=0)
+        self.checkSuper.place(x=950,y=200)
+
+        self.mask_box=tk.BooleanVar()
+        self.mask_box.set(True)
+        self.checkMask = tk.Checkbutton(self,text='Mask usage', var=self.mask_box,onvalue=1,offvalue=0)
+        self.checkMask.place(x=950,y=230)
+
+        self.quarantine_box=tk.BooleanVar()
+        self.quarantine_box.set(True)
+        self.checkquarantine = tk.Checkbutton(self,text='Quarantine usage', var=self.quarantine_box,onvalue=1,offvalue=0)
+        self.checkquarantine.place(x=950,y=260)
+
+        self.vaccine_box=tk.BooleanVar()
+        self.vaccine_box.set(True)
+        self.checkquarantine = tk.Checkbutton(self,text='Quarantine usage', var=self.vaccine_box,onvalue=1,offvalue=0)
+        self.checkquarantine.place(x=950,y=290)
 
         btnBack = ttk.Button(self, text = "<< back", command=self.backOnClick)
         btnBack.place(x=20, y=80)
@@ -502,7 +545,7 @@ class StartPanel(tk.Frame):
 
         self.ax_lg.set_title('Logarithmic graph')
         self.ax_lg.set_xlabel('Time')
-        self.ax_lg.set_ylabel('Log og no of people')
+        self.ax_lg.set_ylabel('Log of no of people')
         self.ax_lg.set_xlim(0,self.xlimit)
         self.ax_lg.set_ylim(0,np.log(self.ylimit))
        
@@ -552,6 +595,10 @@ class StartPanel(tk.Frame):
         self.recovered_log=np.array([])
         self.deceased_log = np.array([])
         self.time_log = np.array([])
+        self.super_log = np.array([])
+        self.mask_log = np.array([])
+        self.quarantine_log = np.array([])
+        self.vaccine_log = np.array([])
     
     def cancel_lg(self):
         if self.lgCanvas is not None:
@@ -621,16 +668,35 @@ class StartPanel(tk.Frame):
         # self.recovered_count = self.du.getTotalCountRecovered(self.sd.getDataset())
 
 
+        
         self.infected_log = np.append(self.infected_log,counts["Infected"])
         self.healthy_log = np.append(self.healthy_log, counts["Healthy"])
         self.recovered_log = np.append(self.recovered_log, counts["Recover"])
         self.deceased_log = np.append(self.deceased_log, counts["Dead"])
+        
+        self.super_log = np.append(self.super_log,counts["Super"])
+        self.mask_log = np.append(self.mask_log,counts["Mask"])
+        self.quarantine_log = np.append(self.quarantine_log,counts["Quarantine"])
+        self.vaccine_log = np.append(self.vaccine_log,counts["Vaccinate"])
         self.time_log = np.append(self.time_log,self.time)
 
-        self.ax.plot(self.time_log,self.infected_log,'r')[0]
-        self.ax.plot(self.time_log,self.healthy_log,'b')[0]
-        self.ax.plot(self.time_log,self.recovered_log,'g')[0]
-        self.ax.plot(self.time_log,self.deceased_log,'black')[0]
+
+        if self.infected_box.get() ==1:
+            self.ax.plot(self.time_log,self.infected_log,'r')[0]
+        if self.healthy_box.get() ==1:
+            self.ax.plot(self.time_log,self.healthy_log,'b')[0]
+        if self.recovered_box.get() ==1:
+            self.ax.plot(self.time_log,self.recovered_log,'g')[0]
+        if self.dead_box.get() ==1:
+            self.ax.plot(self.time_log,self.deceased_log,'black')[0]
+        if self.super_box.get() ==1:
+            self.ax.plot(self.time_log,self.super_log,'yellow')[0]
+        if self.mask_box.get() ==1:
+            self.ax.plot(self.time_log,self.mask_log,'pink')[0]
+        if self.quarantine_box.get() ==1:
+            self.ax.plot(self.time_log,self.quarantine_log,'cyan')[0]
+        if self.vaccine_box.get() ==1:
+            self.ax.plot(self.time_log,self.vaccine_log,'lime')[0]
         # self.leg =self.ax.legend()
         
         self.lineCanvas.draw()
