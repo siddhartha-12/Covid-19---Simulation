@@ -29,7 +29,7 @@ style.use("ggplot")
 
 class DefaultFrame(tk.Tk):
 
-    popo=10
+    
     # cu = Config.get_instance()
     def __init__(self, *args, **kwargs):
 
@@ -43,6 +43,8 @@ class DefaultFrame(tk.Tk):
 
         con = Config.get_instance()
         con.load_from_file("COVID19")
+
+        self.kk=1
         
 
         self.frames = {}
@@ -56,7 +58,6 @@ class DefaultFrame(tk.Tk):
 
         self.show_frame(DefaultPanel)
     def show_frame(self, cont):
-
         frame = self.frames[cont]
         frame.tkraise()
 
@@ -65,17 +66,31 @@ class DefaultPanel(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
+
+        container = tk.Frame(self)
+        # container.pack(side = "top", fill = "both", expand = True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+        self.cont=controller
         label = tk.Label(self, text="Virus Simulation", font=LARGE_FONT)
-        label.pack(pady=30,padx=30)
+        label.pack(pady=30,padx=300, side ='top')
+
+        label0 = tk.Label(self, text="", font=LARGE_FONT)
+        label0.pack(pady=200,padx=200)
 
         btnConfig = ttk.Button(self, text="Set Configuration",command=lambda: controller.show_frame(ConfigurationPanel))
         btnConfig.place(x=100,y=200)
 
-        btnStart = ttk.Button(self, text="Start Simulation",command=lambda: controller.show_frame(StartPanel))
+        btnStart = ttk.Button(self, text="Simulation Window",command=self.sim_window)
         btnStart.place(x=100,y=250)
 
         btnRender = ttk.Button(self, text="Render")
         btnRender.place(x=100,y=300)
+    
+    def sim_window(self):
+        label01 = tk.Label(self, text="", font=LARGE_FONT)
+        label01.pack(pady=2000,padx=2000)
+        self.cont.show_frame(StartPanel)
 
 class ConfigurationPanel(tk.Frame):
 
@@ -85,6 +100,7 @@ class ConfigurationPanel(tk.Frame):
         self.label = tk.Label(self, text="Configuration", font=LARGE_FONT)
         self.label.pack(pady=10,padx=10)
         self.pop=0
+
         
         self.btnBack = ttk.Button(self, text = "<< back", command=lambda: controller.show_frame(DefaultPanel))
         self.btnBack.place(x=20, y=80)
@@ -316,12 +332,15 @@ class StartPanel(tk.Frame):
         self.dots_graph = None
         self.lineCanvas = None
         self.lgCanvas = None
+        self.time =0
        
+        self.pare = parent
 
         self.infected_log = np.array([])
         self.healthy_log = np.array([])
         self.recovered_log = np.array([])
         self.deceased_log = np.array([])
+        self.time_log = np.array([])
 
         self.xlimit = 100
         self.ylimit = 0
@@ -344,18 +363,101 @@ class StartPanel(tk.Frame):
 
         btnSim = ttk.Button(self, text = "Simulate", command=self.startSim)
         btnSim.place(x=950, y=330)
+
+        self.canvass = tk.Canvas(self,height=300, width = 500,background='white')
+        self.canvass.place(x=300,y=50)
+
+        self.fig = Figure()
+        self.ax = self.fig.add_subplot(111)
+        # self.fig.clear()
+       
+        self.ax.set_title('Time series graph')
+        self.ax.set_xlabel('Time')
+        self.ax.set_ylabel('No of people')
+        self.ax.set_xlim(0,self.xlimit)
+        self.ax.set_ylim(0,self.ylimit)
+        
+       
+        self.lines = self.ax.plot([],[],'-r',label='Infected')[0]
+        self.ax.plot([],[],'-b',label='Healthy')[0]
+        self.ax.plot([],[],'-g',label='Recovered')[0]
+        
+
+        self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
+        self.lineCanvas.get_tk_widget().place(x=50,y=420, width = 500,height = 300)
+        
+
+        self.fig_lg = Figure()
+        self.ax_lg = self.fig_lg.add_subplot(111)
+       
+
+        self.ax_lg.set_title('Logarithmic graph')
+        self.ax_lg.set_xlabel('Time')
+        self.ax_lg.set_ylabel('Log og no of people')
+        
+       
+        self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
+
+        self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
+        self.lgCanvas.get_tk_widget().place(x=600,y=420, width = 500,height = 300)
+        self.lgCanvas.draw()
+
+
+        self.canvass.delete('all')
         
     def backOnClick(self):
-        self.cont.show_frame(DefaultPanel)
+        
+        self.fig.clear(True)
+        self.ax_lg.clear()
         self.cancel_oval()
-        self.cancel_line()
-        self.cancel_lg()
+        self.canvass.delete('all')
+        
+        if self.time>0:
+            self.time=0
+            self.time_log=np.array([])
+        
+        self.fig = Figure()
+        self.ax = self.fig.add_subplot(111)
+       
+        self.ax.set_title('Time series graph')
+        self.ax.set_xlabel('Time')
+        self.ax.set_ylabel('No of people')
+        self.ax.set_xlim(0,self.xlimit)
+        self.ax.set_ylim(0,self.ylimit)
+        
+       
+        self.lines = self.ax.plot([],[],'-r',label='Infected')[0]
+        self.ax.plot([],[],'-b',label='Healthy')[0]
+        self.ax.plot([],[],'-g',label='Recovered')[0]
+        self.leg = self.ax.legend()
+
+        self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
+        self.lineCanvas.get_tk_widget().place(x=50,y=420, width = 500,height = 300)
+
+        self.fig_lg = Figure()
+        self.ax_lg = self.fig_lg.add_subplot(111)
+       
+
+        self.ax_lg.set_title('Logarithmic graph')
+        self.ax_lg.set_xlabel('Time')
+        self.ax_lg.set_ylabel('Log og no of people')
+        
+       
+        self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
+
+        self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
+        self.lgCanvas.get_tk_widget().place(x=600,y=420, width = 500,height = 300)
+        self.lgCanvas.draw()
+        self.cont.show_frame(DefaultPanel)
 
     def startSim(self):
-        
+
+        self.canvass.delete('all')
         self.cancel_line()
         self.cancel_oval()
+        self.cancel_lg()
         self.lineCanvas= None
+        self.lgCanvas=None
 
 
         self.cu = Config.get_instance()
@@ -363,7 +465,7 @@ class StartPanel(tk.Frame):
         self.du = DataUtil()
         self.dataset = self.sd.getDataset()
         self.pu = PersonUtil()
-        self.time =0
+        self.time = 0
         self.infected_location_dict = dict()
         self.ylimit = self.cu.get_population()
 
@@ -382,7 +484,11 @@ class StartPanel(tk.Frame):
         self.ax.set_ylim(0,self.ylimit)
         
        
-        self.lines = self.ax.plot([],[],'r')[0]
+        self.lines = self.ax.plot([],[],'-r',label='Infected')[0]
+        self.ax.plot([],[],'-b',label='Healthy')[0]
+        self.ax.plot([],[],'-g',label='Recovered')[0]
+        self.ax.plot([],[],'black',label='Deceased')[0]
+        self.leg = self.ax.legend()
 
         self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
         self.lineCanvas.get_tk_widget().place(x=50,y=420, width = 500,height = 300)
@@ -400,8 +506,8 @@ class StartPanel(tk.Frame):
         self.ax_lg.set_xlim(0,self.xlimit)
         self.ax_lg.set_ylim(0,np.log(self.ylimit))
        
-        self.lines_lg = self.ax_lg.plot([],[],'r')[0]
-
+        self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
+        self.leg_lg = self.ax_lg.legend()
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
         self.lgCanvas.get_tk_widget().place(x=600,y=420, width = 500,height = 300)
         self.lgCanvas.draw()
@@ -440,13 +546,19 @@ class StartPanel(tk.Frame):
     def cancel_line(self):
         if self.lineCanvas is not None:
             self.lineCanvas.close_event()
-            self.infected_log=np.array([])
-            self.healthy_log=np.array([])
-            self.recovered_log=np.array([])
-            self.deceased_log = np.array([])
+        self.ax.plot([],[])
+        self.infected_log=np.array([])
+        self.healthy_log=np.array([])
+        self.recovered_log=np.array([])
+        self.deceased_log = np.array([])
+        self.time_log = np.array([])
+    
+    def cancel_lg(self):
+        if self.lgCanvas is not None:
+            self.lgCanvas.close_event()
 
     def move_oval(self):
-        self.canvass.delete('all')
+        # self.ax.get_legend().remove()
 
         self.time += 1
         self.canvass.delete('all')
@@ -512,19 +624,27 @@ class StartPanel(tk.Frame):
         self.infected_log = np.append(self.infected_log,counts["Infected"])
         self.healthy_log = np.append(self.healthy_log, counts["Healthy"])
         self.recovered_log = np.append(self.recovered_log, counts["Recover"])
+        self.deceased_log = np.append(self.deceased_log, counts["Dead"])
+        self.time_log = np.append(self.time_log,self.time)
 
-        self.ax.plot(np.arange(0,self.time),self.infected_log,'r',label ='Infected')[0]
-        self.ax.plot(np.arange(0,self.time),self.healthy_log,'b')[0]
-        self.ax.plot(np.arange(0,self.time),self.recovered_log,'g')[0]
-        # self.ax.legend(["Infected","Healthy","Recovered"])
+        self.ax.plot(self.time_log,self.infected_log,'r')[0]
+        self.ax.plot(self.time_log,self.healthy_log,'b')[0]
+        self.ax.plot(self.time_log,self.recovered_log,'g')[0]
+        self.ax.plot(self.time_log,self.deceased_log,'black')[0]
+        # self.leg =self.ax.legend()
+        
         self.lineCanvas.draw()
 
-        self.ax_lg.plot(np.arange(0,self.time),np.log(self.infected_log),'r')[0]
+        self.ax_lg.plot(self.time_log,np.log(self.infected_log),'r')[0]
         # self.ax.plot(np.arange(0,self.time),self.healthy_log,'g-')[0]
+        
         self.lgCanvas.draw()
+        self.dots_graph=self.canvass.after(100,self.move_oval)
+        
 
-        self.canvass.after(100,self.move_oval)
+    
 
 window = DefaultFrame()
 window.geometry('1150x1500')
+window.resizable(True,True)
 window.mainloop()
