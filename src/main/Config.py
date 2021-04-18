@@ -157,17 +157,38 @@ class Config:
         self.set_k_factor(float(cu.get_value(disease_section,"k_factor")))
         self.set_days_contageous(int(cu.get_value(disease_section,"days_contageous"))*factor)
         self.set_mask_introduced_timeline(int(cu.get_value(disease_section,"mask_timeline"))*factor)
-        self.set_mask_usage_effectiveness(int(cu.get_value(disease_section,"mask_usuage_effectiveness")))
-        self.set_mask_usage_percentage(int(cu.get_value(disease_section,"mask_usuage_percentage")))
+        self.set_mask_usage_effectiveness(float(cu.get_value(disease_section,"mask_usuage_effectiveness")))
+        self.set_mask_usage_percentage(float(cu.get_value(disease_section,"mask_usuage_percentage")))
         self.set_quarantine_introduced_timeline(int(cu.get_value(disease_section,"quarantine_timeline"))*factor)
-        self.set_qurantine_effectiveness(int(cu.get_value(disease_section,"qurantine_effectiveness")))
-        self.set_qurantine_usage_percentage(int(cu.get_value(disease_section,"qurantine_percentage")))
+        self.set_qurantine_effectiveness(float(cu.get_value(disease_section,"qurantine_effectiveness")))
+        self.set_qurantine_usage_percentage(float(cu.get_value(disease_section,"qurantine_percentage")))
         self.set_vaccine_introduced_timeline(int(cu.get_value(disease_section,"vaccine_timeline"))*factor)
-        self.set_vaccine_effectiveness(int(cu.get_value(disease_section,"vaccine_effectiveness")))
+        self.set_vaccine_effectiveness(float(cu.get_value(disease_section,"vaccine_effectiveness")))
         self.set_vaccine_usage_percentage(float(cu.get_value(disease_section,"vaccinated_percentage")))
         to_be_infected = int(self.get_r_factor()) * (int(self.get_population())*int(self.get_initial_infected_percentage())/100)
         self.set_total_to_infect(to_be_infected)
         
+    def load_from_parameters(self,disease_section,population,initial_infected_percentage,r_factor,k_factor,
+    days_contageous,mask_introduced_timeline,mask_usage_effectiveness,mask_usuage_percentage,quarantine_timeline,
+    qurantine_effectiveness,qurantine_percentage,vaccine_timeline,vaccine_effectiveness,vaccinated_percentage):
+        factor = 1
+        self.set_property_name(disease_section)
+        self.set_population(population)
+        self.set_initial_infected_percentage(initial_infected_percentage)
+        self.set_r_factor(int(r_factor))
+        self.set_k_factor(float(k_factor))
+        self.set_days_contageous(int(days_contageous)*factor)
+        self.set_mask_introduced_timeline(int(mask_timeline)*factor)
+        self.set_mask_usage_effectiveness(float(mask_usuage_effectiveness))
+        self.set_mask_usage_percentage(float(mask_usuage_percentage))
+        self.set_quarantine_introduced_timeline(int(quarantine_timeline)*factor)
+        self.set_qurantine_effectiveness(float(qurantine_effectiveness))
+        self.set_qurantine_usage_percentage(float(qurantine_percentage))
+        self.set_vaccine_introduced_timeline(int(vaccine_timeline)*factor)
+        self.set_vaccine_effectiveness(float(vaccine_effectiveness))
+        self.set_vaccine_usage_percentage(float(vaccinated_percentage))
+        to_be_infected = int(self.get_r_factor()) * (int(self.get_population())*int(self.get_initial_infected_percentage())/100)
+        self.set_total_to_infect(to_be_infected)
 
 
 if __name__=="__main__":
