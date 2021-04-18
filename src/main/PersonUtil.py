@@ -102,6 +102,7 @@ class PersonUtil:
         low_usuage = usuage-10 if usuage-10>0 else 0
         high_usuage = usuage+10 if usuage<100 else 100
         probability_of_vaccine = float(np.random.randint(low_usuage,high_usuage)) / 100
+        print(probability_of_vaccine)
         status = np.random.choice([True,False],1,p = [probability_of_vaccine,1-probability_of_vaccine])
         return status[0]
 
@@ -155,7 +156,7 @@ if __name__=="__main__":
     pu = PersonUtil()
     f1 = 0
     f2 = 0
-    for i in range(100):
+    for i in range(10):
         a=pu.updateVaccination()
         if a:
             f1 +=1
