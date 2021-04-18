@@ -9,7 +9,9 @@ class SimalationData():
         self.population_set = None
         logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=logging.DEBUG)
         self.config = Config.get_instance()
-        self.config.load_from_file("COVID19")
+        section = self.config.get_property_name()
+        if(section):
+            self.config.load_from_file(str(section))
 
     def getDataset(self)-> list:
         if(self.population_set is None):
