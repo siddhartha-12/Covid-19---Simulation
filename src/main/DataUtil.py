@@ -27,81 +27,57 @@ class DataUtil:
     def getLocationHealthy(self,personDataset:list) -> list:
         x_coordinate  = list()
         y_coordinate = list()
+        id_list = list()
         for i in personDataset:
             if not i.get_infected() or i.get_recovered():
                 x_coordinate.append(i.get_x())
                 y_coordinate.append(i.get_y())
-        return [x_coordinate,y_coordinate]
+                id_list.append(i.get_id())
+        return [x_coordinate,y_coordinate,id_list]
 
     def getLocationRecovered(self,personDataset:list) -> list:
         x_coordinate  = list()
         y_coordinate = list()
+        id_list = list()
         for i in personDataset:
-            if i.get_recovered:
+            if i.get_recovered():
                 x_coordinate.append(i.get_x())
                 y_coordinate.append(i.get_y())
-        return [x_coordinate,y_coordinate]
+                id_list.append(i.get_id())
+        return [x_coordinate,y_coordinate,id_list]
 
     def getLocationVaccincated(self,personDataset:list) -> list:
         x_coordinate  = list()
         y_coordinate = list()
+        id_list = list()
         for i in personDataset:
-            if i.get_recovered:
+            if i.get_vaccinated():
                 x_coordinate.append(i.get_x())
                 y_coordinate.append(i.get_y())
-        return [x_coordinate,y_coordinate]
+                id_list.append(i.get_id())
+        return [x_coordinate,y_coordinate,id_list]
 
     def getLocationOfMaskedPerson(self,personDataset:list) -> list:
         x_coordinate  = list()
         y_coordinate = list()
+        id_list = list()
         for i in personDataset:
-            if i.get_mask_usage:
+            if i.get_mask_usage():
                 x_coordinate.append(i.get_x())
                 y_coordinate.append(i.get_y())
-        return [x_coordinate,y_coordinate]
+                id_list.append(i.get_id())
+        return [x_coordinate,y_coordinate,id_list]
     
-    def getTotalCountInfected(self,personDataset:list) -> int:
-        count = 0 
+    def getLocationOfQuarantinedPerson(self,personDataset:list) -> list:
+        x_coordinate  = list()
+        y_coordinate = list()
+        id_list = list()
         for i in personDataset:
-            if i.get_infected():
-                count +=1
-        return count
-    def getTotalCountHealthy(self,personDataset:list) -> int:
-        count = 0 
-        for i in personDataset:
-            if i.get_infected():
-                count +=1
-        return count
-    def getTotalCountDead(self,personDataset:list) -> int:
-        count = 0 
-        for i in personDataset:
-            if i.get_infected():
-                count +=1
-        return count
-    def getTotalCountRecovered(self,personDataset:list) -> int:
-        count = 0 
-        for i in personDataset:
-            if i.get_infected():
-                count +=1
-        return count
-    def getTotalCountMask(self,personDataset:list) -> int:
-        count = 0 
-        for i in personDataset:
-            if i.get_infected():
-                count +=1
-        return count
-    def getTotalCountQuarantine(self,personDataset:list) -> int:
-        count = 0 
-        for i in personDataset:
-            if i.get_infected():
-                count +=1
-        return count
-    def getTotalCountRecovered(self,personDataset:list) -> int:
-        count = 0 
-        for i in personDataset:
-            if i.get_infected():
-                count +=1
-        return count
+            if i.get_qurantine():
+                x_coordinate.append(i.get_x())
+                y_coordinate.append(i.get_y())
+                id_list.append(i.get_id())
+        return [x_coordinate,y_coordinate,id_list]
 
     def getTotalCountAll(self,personDataset:list) -> dict: 
         count_dict = defaultdict(int)
