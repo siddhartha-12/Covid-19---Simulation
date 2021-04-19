@@ -15,7 +15,14 @@ class Person :
         self._age = rd.randint(1, 100)
         self._gender = rd.choice(["M","F"])
         medical_scale = [1,2,3,4,5,6,7,8,9,10]
-        medical_Scale_p = [0.03,0.04,0.05,0.05,0.09,0.14,0.2,0.2,0.1,0.1]
+        if self._age>80:
+            medical_Scale_p = [0.03,0.1,0.04,0.05,0.05,0.09,0.14,0.2,0.2,0.1]
+        elif self._age>50:
+            medical_Scale_p = [0.03,0.04,0.05,0.2,0.1,0.1,0.05,0.09,0.14,0.2]
+        elif self._age>20:
+            medical_Scale_p = [0.03,0.04,0.05,0.05,0.09,0.14,0.2,0.2,0.1,0.1]
+        else:
+            medical_Scale_p = [0.03,0.04,0.05,0.05,0.09,0.14,0.2,0.2,0.1,0.1]
         medical_Scale_factor = np.random.choice(medical_scale,1,p=medical_Scale_p)
         self._medical_history_scale = medical_Scale_factor[0] #''' Medical history scale is vulnerability of immune system due to past illess. 1 being poor healthy and 10 good health'''
         self._k_factor = 0
