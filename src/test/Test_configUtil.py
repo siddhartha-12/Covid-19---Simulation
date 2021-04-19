@@ -5,7 +5,7 @@ cwd = os.getcwd()+"/src/main"
 sys.path.insert(1, cwd)
 from ConfigUtil import ConfigUtil
 
-class ConfigClassTest(unittest.TestCase):
+class ConfigUtilClassTest(unittest.TestCase):
 
     def setUp(self):
         self.conf = ConfigUtil.get_instance()
