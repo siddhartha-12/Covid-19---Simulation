@@ -58,11 +58,19 @@ class ConfigUtil:
             logging.info("Config file %s doesn't exist.")
             # print("False")
             return False
+
+    #Method to retrieve all sections from config.cfg file
     def get_all_sections(self)->list:
-        return self.cp.sections()
+        try:
+            if(not self.isloaded):
+                self.load_config()        
+            sections = self.cp.sections()
+        except configparser.NoOptionError:
+            sections = None
+        return sections        
+        
 
 if __name__ == "__main__":
     cu =  ConfigUtil()
     print(cu.get_value("COVID19","name"))
-    
     print(cu.get_all_sections())
