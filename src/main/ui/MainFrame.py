@@ -72,11 +72,16 @@ class DefaultPanel(tk.Frame):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         self.cont=controller
+        
+        self.img = tk.PhotoImage(file =cwd+"/images/virus4.png")
+        bg_img = tk.Label(self,image=self.img)
+        bg_img.place(x=0,y=0)
+        
         label = tk.Label(self, text="Virus Simulation", font=LARGE_FONT)
         label.pack(pady=30,padx=300, side ='top')
 
-        label0 = tk.Label(self, text="", font=LARGE_FONT)
-        label0.pack(pady=200,padx=200)
+        # label0 = tk.Label(self, text="", font=LARGE_FONT)
+        # label0.pack(pady=200,padx=200)
 
         btnConfig = ttk.Button(self, text="Set Configuration",command=lambda: controller.show_frame(ConfigurationPanel))
         btnConfig.place(x=100,y=200)
@@ -86,6 +91,8 @@ class DefaultPanel(tk.Frame):
 
         btnRender = ttk.Button(self, text="Render")
         btnRender.place(x=100,y=300)
+
+        
     
     def sim_window(self):
         label01 = tk.Label(self, text="", font=LARGE_FONT)
@@ -360,6 +367,7 @@ class StartPanel(tk.Frame):
 
         self.xlimit = 100
         self.ylimit = 0
+        self.logYlimit = 0
 
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Simulation", font=LARGE_FONT)
@@ -372,58 +380,58 @@ class StartPanel(tk.Frame):
 
         #---------- legend labels ------------
 
-        self.infected_legend = tk.Label(self, text="Infected:")
-        self.infected_legend.place(x=900-200,y=580-80)
+        self.infected_legend = tk.Label(self, text="Total Cases:")
+        self.infected_legend.place(x=870-200,y=580-80)
 
-        self.infected_color = tk.Label(self, text="__________",fg='red')
+        self.infected_color = tk.Label(self, text="__________",fg='maroon')
         self.infected_color.place(x=960-200,y=575-80)
 
-        self.healthy_legend = tk.Label(self, text="Healthy:")
-        self.healthy_legend.place(x=900-200,y=610-80)
+        self.healthy_legend = tk.Label(self, text="Active Cases:")
+        self.healthy_legend.place(x=860-200,y=610-80)
 
-        self.infected_color = tk.Label(self, text="__________",fg='blue')
+        self.infected_color = tk.Label(self, text="__________",fg='red')
         self.infected_color.place(x=960-200,y=605-80)
 
-        self.recovered_legend = tk.Label(self, text="Recovered:")
-        self.recovered_legend.place(x=880-200,y=640-80)
+        self.recovered_legend = tk.Label(self, text="Super Spreaders:")
+        self.recovered_legend.place(x=835-200,y=640-80)
 
-        self.recovered_color = tk.Label(self, text="__________",fg='green')
+        self.recovered_color = tk.Label(self, text="__________",fg='orange')
         self.recovered_color.place(x=960-200,y=635-80)
 
-        self.dead_legend = tk.Label(self, text="Dead:")
-        self.dead_legend.place(x=912-200,y=670-80)
+        self.dead_legend = tk.Label(self, text="Recovered:")
+        self.dead_legend.place(x=875-200,y=670-80)
 
-        self.dead_color = tk.Label(self, text="__________",fg='black')
+        self.dead_color = tk.Label(self, text="__________",fg='green')
         self.dead_color.place(x=960-200,y=665-80)
 
-        self.super_legend = tk.Label(self, text="Super Spreader:")
-        self.super_legend.place(x=850-200,y=700-80)
+        self.super_legend = tk.Label(self, text="Deceased:")
+        self.super_legend.place(x=880-200,y=700-80)
 
-        self.super_color = tk.Label(self, text="__________",fg='yellow')
+        self.super_color = tk.Label(self, text="__________",fg='black')
         self.super_color.place(x=960-200,y=695-80)
 
-        self.mask_legend = tk.Label(self, text="Mask:")
-        self.mask_legend.place(x=912-200,y=730-80)
+        self.mask_legend = tk.Label(self, text="Healthy:")
+        self.mask_legend.place(x=895-200,y=730-80)
 
-        self.mask_color = tk.Label(self, text="__________",fg='pink')
+        self.mask_color = tk.Label(self, text="__________",fg='blue')
         self.mask_color.place(x=960-200,y=725-80)
 
-        self.quarantine_legend = tk.Label(self, text="Quarantine:")
-        self.quarantine_legend.place(x=875-200,y=760-80)
+        self.quarantine_legend = tk.Label(self, text="Mask Usage:")
+        self.quarantine_legend.place(x=865-200,y=760-80)
 
-        self.quarantine_color = tk.Label(self, text="__________",fg='cyan')
+        self.quarantine_color = tk.Label(self, text="__________",fg='pink')
         self.quarantine_color.place(x=960-200,y=755-80)
 
-        self.vaccine_legend = tk.Label(self, text="Vaccine:")
-        self.vaccine_legend.place(x=895-200,y=790-80)
+        self.vaccine_legend = tk.Label(self, text="Quarantined:")
+        self.vaccine_legend.place(x=865-200,y=790-80)
 
-        self.vaccine_color = tk.Label(self, text="__________",fg='lime')
+        self.vaccine_color = tk.Label(self, text="__________",fg='cyan')
         self.vaccine_color.place(x=960-200,y=785-80)
 
-        self.vaccine_legend = tk.Label(self, text="Total:")
-        self.vaccine_legend.place(x=905-200,y=820-80)
+        self.vaccine_legend = tk.Label(self, text="Vaccinated:")
+        self.vaccine_legend.place(x=870-200,y=820-80)
 
-        self.vaccine_color = tk.Label(self, text="__________",fg='maroon')
+        self.vaccine_color = tk.Label(self, text="__________",fg='lime')
         self.vaccine_color.place(x=960-200,y=815-80)
 
         #---------- radio buttons ------------
@@ -467,7 +475,8 @@ class StartPanel(tk.Frame):
         self.checkquarantine = tk.Checkbutton(self,text='Quarantine usage', var=self.vaccine_box,onvalue=1,offvalue=0)
         # self.checkquarantine.place(x=950,y=290)
 
-
+        self.no_of_infected.config(text="Total Cases  :"+""+"\nNew Cases  :" +""+"\nActive Cases  :" +"" +"\nSuper Spreader : " + "" + "\nRecovered  :" +"" + "\nDeceased  :" +"" +"\nHealthy : " + "" + "\nMask Usage  :" +"" + "\nQuarantined  :" +"" +"\nVaccinated : " + "" +"\nPredicted more infection: " + "" )
+        self.no_of_infected.place(x=700,y=200)
 #---------------- back and simulate buttons ---------------
         btnBack = ttk.Button(self, text = "<< back", command=self.backOnClick)
         btnBack.place(x=20, y=10)
@@ -480,8 +489,14 @@ class StartPanel(tk.Frame):
 
 #---------------- Simulation window  ----------------------
 
-        self.canvass = tk.Canvas(self,height=350, width = 600,background='white')
+        #self.img = tk.PhotoImage(file =cwd+"/ui/img.png")
+        self.canvass = tk.Canvas(self,height=350, width = 600, background ='white')
         self.canvass.place(x=50,y=70)
+
+        # bg_img = tk.Label(self,image=self.img)
+        # bg_img.place(x=50,y=70)
+        # self.img = img = tk.PhotoImage(file =cwd+"/ui/img.png")
+        # self.canvass.create_image(100,100,image =self.img, anchor ="nw")
 
 #----------- time series graph ---------------------
         self.fig = Figure()
@@ -511,7 +526,7 @@ class StartPanel(tk.Frame):
         self.ax2.set_ylim(0,50)
 
         self.lines_infected = self.ax2.plot([],[],'r')[0]
-        self.lines_super = self.ax2.plot([],[],'yellow')[0]
+        self.lines_super = self.ax2.plot([],[],'orange')[0]
         self.lines_dead = self.ax2.plot([],[],'black')[0]
 
         self.lineCanvas2 = po.FigureCanvasTkAgg(self.fig2, master = self)
@@ -545,6 +560,9 @@ class StartPanel(tk.Frame):
             self.time=0
             self.time_log=list()
 
+        self.no_of_infected.config(text="Total Cases  :"+""+"\nNew Cases  :" +""+"\nActive Cases  :" +"" +"\nSuper Spreader : " + "" + "\nRecovered  :" +"" + "\nDeceased  :" +"" +"\nHealthy : " + "" + "\nMask Usage  :" +"" + "\nQuarantined  :" +"" +"\nVaccinated : " + "" +"\nPredicted more infection: " + "" )
+        self.no_of_infected.place(x=700,y=200)
+
 # -------------- time series graph-------------
         
         self.fig = Figure()
@@ -577,7 +595,7 @@ class StartPanel(tk.Frame):
         self.ax2.set_ylim(0,self.logYlimit)
 
         self.lines_infected = self.ax2.plot([],[],'r')[0]
-        self.lines_super = self.ax2.plot([],[],'yellow')[0]
+        self.lines_super = self.ax2.plot([],[],'orange')[0]
         self.lines_dead = self.ax2.plot([],[],'black')[0]
 
         self.lineCanvas2 = po.FigureCanvasTkAgg(self.fig2, master = self)
@@ -625,6 +643,8 @@ class StartPanel(tk.Frame):
 
         self.canvass = tk.Canvas(self,height=350, width = 600,background='white')
         self.canvass.place(x=50,y=70)
+        #self.img = img = tk.PhotoImage(file =cwd+"/ui/img.png")
+        #self.canvass.create_image(100,100,image =self.img, anchor ="nw")
 
 
         #--------- time series graph ------------
@@ -660,7 +680,7 @@ class StartPanel(tk.Frame):
         self.ax2.set_ylim(0,self.logYlimit)
 
         self.lines_infected = self.ax2.plot([],[],'r')[0]
-        self.lines_super = self.ax2.plot([],[],'yellow')[0]
+        self.lines_super = self.ax2.plot([],[],'orange')[0]
         self.lines_dead = self.ax2.plot([],[],'black')[0]
 
         self.lineCanvas2 = po.FigureCanvasTkAgg(self.fig2, master = self)
@@ -795,7 +815,18 @@ class StartPanel(tk.Frame):
             self.ax_lg.set_xlim(0, self.xlimit)
             self.ax.set_xlim(0,self.xlimit)
             self.ax2.set_xlim(0,self.xlimit)
-            
+        
+        if counts["Infected"] > self.logYlimit:
+            self.logYlimit= counts["Infected"]+100
+            self.ax2.set_ylim(0,self.logYlimit)
+
+        if counts["Super"] > self.logYlimit:
+            self.logYlimit= counts["Super"]+100
+            self.ax2.set_ylim(0,self.logYlimit)
+
+        if counts["Dead"] > self.logYlimit:
+            self.logYlimit= counts["Dead"]+100
+            self.ax2.set_ylim(0,self.logYlimit)            
         
         self.infected_log.append(counts["Infected"])
         self.healthy_log.append(counts["Healthy"])
