@@ -724,7 +724,7 @@ class StartPanel(tk.Frame):
 
     def move_oval(self):
         # self.ax.get_legend().remove()
-
+        self.new_infect = 0
         self.time += 1
         self.canvass.delete('all')
         #Repopulating infected zones
@@ -740,13 +740,11 @@ class StartPanel(tk.Frame):
                     if (x,y) in self.infected_location_dict:
                         self.dataset[i],quo = self.pu.updatePerson(True, self.dataset[i],self.time)
                         if(quo):
+                            self.new_infect+=1
                             got_infected_from = self.infected_location_dict[(x,y)]
                             self.dataset[got_infected_from].set_can_infect(self.dataset[got_infected_from].get_can_infect()-1)
                     else:
                          self.dataset[i] = self.pu.updatePerson(False,self.dataset[i],self.time)[0]
-                # elif self.dataset[i].get_infected() and not self.dataset[i].get_vaccinated():
-                #     # if self.dataset[i].get_can_infect() > 0:
-                #     #     self.createCluster( self.dataset[i].get_x(), self.dataset[i].get_y(), self.dataset[i].get_id())
                 else:
                     self.dataset[i] = self.pu.updatePerson(False, self.dataset[i],self.time)[0]
 
@@ -755,7 +753,7 @@ class StartPanel(tk.Frame):
         self.timer_label.config(text="Days : " + str(int(self.time)))
         self.timer_label.place(x=70,y=80)
         Total_cases = counts["Infected"] + counts["Recover"] + counts["Dead"]
-        self.no_of_infected.config(text="Total Cases  :"+str(Total_cases)+"\nActive Cases  :" +str(counts["Infected"]) +"\nSuper Spreader : " + str(counts["Super"]) + "\nRecovered  :" +str(counts["Recover"]) + "\nDeceased  :" +str(counts["Dead"]) +"\nHealthy : " + str(counts["Healthy"]) + "\nMask Usage  :" +str(counts["Mask"]) + "\nQuarantined  :" +str(counts["Quarantine"]) +"\nVaccinated : " + str(counts["Vaccinate"]) +"\nPredicted more infection: " + str(int(self.cu.get_total_to_infect())) )
+        self.no_of_infected.config(text="Total Cases  :"+str(Total_cases)+"\nNew Cases  :" +str(self.new_infect)+"\nActive Cases  :" +str(counts["Infected"]) +"\nSuper Spreader : " + str(counts["Super"]) + "\nRecovered  :" +str(counts["Recover"]) + "\nDeceased  :" +str(counts["Dead"]) +"\nHealthy : " + str(counts["Healthy"]) + "\nMask Usage  :" +str(counts["Mask"]) + "\nQuarantined  :" +str(counts["Quarantine"]) +"\nVaccinated : " + str(counts["Vaccinate"]) +"\nPredicted more infection: " + str(int(self.cu.get_total_to_infect())) )
         self.no_of_infected.place(x=0,y=100)
         for i in range(len(self.dataset)):
             if(self.dataset[i].get_infected()):
