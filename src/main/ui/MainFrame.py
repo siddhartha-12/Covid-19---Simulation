@@ -420,6 +420,12 @@ class StartPanel(tk.Frame):
         self.vaccine_color = tk.Label(self, text="__________",fg='lime')
         self.vaccine_color.place(x=960-200,y=785-80)
 
+        self.vaccine_legend = tk.Label(self, text="Total:")
+        self.vaccine_legend.place(x=905-200,y=820-80)
+
+        self.vaccine_color = tk.Label(self, text="__________",fg='maroon')
+        self.vaccine_color.place(x=960-200,y=815-80)
+
         #---------- radio buttons ------------
         self.infected_box=tk.BooleanVar()
         self.infected_box.set(True)
@@ -799,6 +805,7 @@ class StartPanel(tk.Frame):
         self.mask_log.append(counts["Mask"])
         self.quarantine_log.append(counts["Quarantine"])
         self.vaccine_log.append(counts["Vaccinate"])
+        self.total_log.append(counts["Infected"] + counts["Recover"] + counts["Dead"])
         if counts["Infected"]!=0:
             self.infected_lg_log.append(np.log2(counts["Infected"]))
         else:
@@ -838,6 +845,8 @@ class StartPanel(tk.Frame):
         if self.vaccine_box.get() ==1:
             self.lines_vaccine.set_xdata(self.time_log)
             self.lines_vaccine.set_ydata(self.vaccine_log)
+        self.lines_total.set_xdata(self.time_log)
+        self.lines_total.set_ydata(self.total_log)
 
         self.lines_infected_lg.set_xdata(self.time_log)
         self.lines_infected_lg.set_ydata(self.infected_lg_log)
