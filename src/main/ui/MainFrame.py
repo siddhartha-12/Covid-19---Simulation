@@ -489,7 +489,7 @@ class StartPanel(tk.Frame):
         self.ax2 = self.fig2.add_subplot(111)
         self.ax2.set_title('Time series graph')
         self.ax2.set_xlabel('Time')
-        self.ax2.set_ylabel('Growth Rate')
+        self.ax2.set_ylabel('# People')
         self.ax2.set_xlim(0,self.xlimit)
         self.ax2.set_ylim(0,self.ylimit)
 
@@ -551,7 +551,7 @@ class StartPanel(tk.Frame):
        
         self.ax2.set_title('Time series graph')
         self.ax2.set_xlabel('Time')
-        self.ax2.set_ylabel('No of people')
+        self.ax2.set_ylabel('# People')
         self.ax2.set_xlim(0,self.xlimit)
         self.ax2.set_ylim(0,self.ylimit)
 
@@ -568,7 +568,7 @@ class StartPanel(tk.Frame):
         self.ax_lg = self.fig_lg.add_subplot(111)
         self.ax_lg.set_title('Logarithmic graph')
         self.ax_lg.set_xlabel('Time')
-        self.ax_lg.set_ylabel('Log og no of people')
+        self.ax_lg.set_ylabel('Growth Rate')
         
        
         self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
@@ -624,7 +624,7 @@ class StartPanel(tk.Frame):
         self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
         self.lineCanvas.get_tk_widget().place(x=50,y=420, width = 500,height = 300)
 
-#----------- 2nd graph --------------------
+    #----------- 2nd graph --------------------
         self.fig2 = Figure()
         self.ax2 = self.fig2.add_subplot(111)
        
@@ -642,16 +642,14 @@ class StartPanel(tk.Frame):
         self.lineCanvas2 = po.FigureCanvasTkAgg(self.fig2, master = self)
         self.lineCanvas2.get_tk_widget().place(x=650,y=420, width = 500,height = 300)
 
-#------------- log graph ---------------------
+    #------------- log graph ---------------------
+        
         self.fig_lg = Figure()
         self.ax_lg = self.fig_lg.add_subplot(111)
         self.ax_lg.set_title('Logarithmic graph')
         self.ax_lg.set_xlabel('Time')
         self.ax_lg.set_ylabel('Log og no of people')
-        
-       
         self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
-
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
         self.lgCanvas.get_tk_widget().place(x=800,y=50, width = 500,height = 300)
         self.lgCanvas.draw()
@@ -770,8 +768,6 @@ class StartPanel(tk.Frame):
         self.quarantine_log.append(counts["Quarantine"])
         self.vaccine_log.append(counts["Vaccinate"])
         self.time_log.append(self.time)
-
-    
 
         if self.infected_box.get() ==1:
             self.lines_infected.set_xdata(self.time_log)
