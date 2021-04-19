@@ -11,7 +11,7 @@ class SimalationData():
         self.config = Config.get_instance()
         section = self.config.get_property_name()
         if(section==None):
-            self.config.load_from_file(str(section))
+            self.config.load_from_file("COVID19")
 
     def getDataset(self)-> list:
         if(self.population_set is None):
@@ -31,7 +31,7 @@ class SimalationData():
             self.population_set[i].set_infected(True)
             self.population_set[i].set_can_infect(self.config.get_r_factor())
             self.config.update_to_infect()
-            self.population_set[i].set_recoveryDays(self.config.get_days_contageous()+15)
+            self.population_set[i].set_recoveryDays(np.random.randint(self.config.get_days_contageous(),self.config.get_days_contageous()+30))
 
     def initializePersonDataset(self,popualation: int)-> list:
         personDataset = list()

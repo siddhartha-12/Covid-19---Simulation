@@ -53,7 +53,7 @@ class PersonUtil:
                 person.set_mask_usage(self.updateMak(mask))
             # Check if vaccine has been introduced or not and check if the person will get vaccinated or not
             if self.cu.get_vaccine_introduced_timeline() < time and not person.get_vaccinated() and not person.get_deceased() and not person.get_infected():
-                    person.set_vaccinated(self.updateVaccination())
+                    person.set_vaccinated(self.updateVaccination(time))
         else:
             person.set_infected(False)
             person.set_qurantine(False)
@@ -80,29 +80,27 @@ class PersonUtil:
     def updateMak(self,status) -> bool:
         
         if(status):
-            result = np.random.choice([True, False],1,p = [0.7,0.3])
+            result = np.random.choice([True, False],1,p = [0.5,0.5])
         else:
-            result = np.random.choice([True, False],1,p = [0.3,0.7])
+            result = np.random.choice([True, False],1,p = [0.5,0.5])
         return result[0]
     
     #Method to update if the quarantine status quo will change for the person
     def updateQuarantine(self,status:bool) -> bool:
         frame = [True,False]
         if(status):
-            statusupdate = np.random.choice(frame,1,p = [0.7,0.3])
+            statusupdate = np.random.choice(frame,1,p = [0.5,0.5])
         else:
-            statusupdate = np.random.choice(frame,1,p = [0.3,0.7])
+            statusupdate = np.random.choice(frame,1,p = [0.5,0.5])
         return (statusupdate[0])
     
     #Method to update if the vaccine status quo will change for the person
-    def updateVaccination(self):
+    def updateVaccination(self,time):
         usuage = self.cu.get_vaccine_usage_percentage()
-        if(int(usuage)==0):
+        if(usuage==0):
             return False
-        low_usuage = usuage-10 if usuage-10>0 else 0
-        high_usuage = usuage+10 if usuage<100 else 100
-        probability_of_vaccine = float(np.random.randint(low_usuage,high_usuage)) / 100
-        print(probability_of_vaccine)
+        high_usuage = usuage if usuage<100 else 100
+        probability_of_vaccine = high_usuage / 1000
         status = np.random.choice([True,False],1,p = [probability_of_vaccine,1-probability_of_vaccine])
         return status[0]
 
@@ -156,8 +154,8 @@ if __name__=="__main__":
     pu = PersonUtil()
     f1 = 0
     f2 = 0
-    for i in range(10):
-        a=pu.updateVaccination()
+    for i in range(3000):
+        a=pu.updateVaccination(i)
         if a:
             f1 +=1
         else:
