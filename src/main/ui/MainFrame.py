@@ -104,6 +104,7 @@ class ConfigurationPanel(tk.Frame):
     def __init__(self, parent, controller):
         self.conf=Config.get_instance()
         tk.Frame.__init__(self, parent)
+        self.xadd=200
         self.label = tk.Label(self, text="Configuration", font=LARGE_FONT)
         self.label.pack(pady=10,padx=10)
         self.pop=0
@@ -114,13 +115,13 @@ class ConfigurationPanel(tk.Frame):
         self.btnBack.place(x=20, y=80)
 
         self.lblVirusType = tk.Label(self, text="Select Virus")
-        self.lblVirusType.place(x=400, y=150)
+        self.lblVirusType.place(x=400+self.xadd, y=150)
 
         self.combovar= StringVar()
         self.combovar.trace('w',self.on_change)
         list_disease = self.cutil.get_all_sections()
         self.comboBoxVirus = ttk.Combobox(self, textvar=self.combovar, state = 'readonly', values = list_disease[1:])
-        self.comboBoxVirus.place(x=500, y=150)
+        self.comboBoxVirus.place(x=500+self.xadd, y=150)
         self.comboBoxVirus.current(0)
         self.set_virus_properties()
 
@@ -128,135 +129,135 @@ class ConfigurationPanel(tk.Frame):
     def set_virus_properties(self):
         self.conf=Config.get_instance()
         self.lblPopulation = tk.Label(self, text="Population")
-        self.lblPopulation.place(x=200,y=250)
+        self.lblPopulation.place(x=200+self.xadd,y=250)
 
         self.txtPopulation = tk.Text(self, height =1, width = 25)
         self.txtPopulation.insert("end",str(self.conf.get_population()))
-        self.txtPopulation.place(x=300,y=250)
+        self.txtPopulation.place(x=300+self.xadd,y=250)
 
         self.lblInitialInfectedPer = tk.Label(self, text="Initial Infected Percentage")
-        self.lblInitialInfectedPer.place(x=105,y=300)
+        self.lblInitialInfectedPer.place(x=105+self.xadd,y=300)
 
         self.txtInitialInfectedPer = tk.Text(self, height =1, width = 25)
         self.txtInitialInfectedPer.insert("end",str(self.conf.get_initial_infected_percentage()))
-        self.txtInitialInfectedPer.place(x=300,y=300)
+        self.txtInitialInfectedPer.place(x=300+self.xadd,y=300)
 
         self.lblRFactor = tk.Label(self, text="R factor")
-        self.lblRFactor.place(x=215,y=350)
+        self.lblRFactor.place(x=215+self.xadd,y=350)
 
         self.sdrRFactor = tk.Scale(self, from_=0, to=10, orient=tk.HORIZONTAL, length=130, showvalue=0, resolution=1,command=self.set_valueRFactor)
         self.sdrRFactor.set(self.conf.get_r_factor())
-        self.sdrRFactor.place(x=300,y=350)
+        self.sdrRFactor.place(x=300+self.xadd,y=350)
 
         self.lblRFactorVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =3)
-        self.lblRFactorVal.place(x=450,y=350)
+        self.lblRFactorVal.place(x=450+self.xadd,y=350)
 
         self.lblKFactor = tk.Label(self, text="K factor")
-        self.lblKFactor.place(x=215,y=400)
+        self.lblKFactor.place(x=215+self.xadd,y=400)
 
         self.sdrKFactor = tk.Scale(self, from_=0, to=1, orient=tk.HORIZONTAL, length=130, showvalue=0, resolution=0.01,command=self.set_valueKFactor)
         self.sdrKFactor.set(self.conf.get_k_factor())
-        self.sdrKFactor.place(x=300,y=400)
+        self.sdrKFactor.place(x=300+self.xadd,y=400)
 
         self.lblKFactorVal = tk.Label(self,text=self.sdrKFactor.get(), height =1, width =3)
-        self.lblKFactorVal.place(x=450,y=400)
+        self.lblKFactorVal.place(x=450+self.xadd,y=400)
 
         self.lblDaysContagious = tk.Label(self, text="Days Contagious")
-        self.lblDaysContagious.place(x=160,y=450)
+        self.lblDaysContagious.place(x=160+self.xadd,y=450)
 
         self.txtDaysContagious = tk.Text(self, height =1, width = 25)
         self.txtDaysContagious.insert("end",str(self.conf.get_days_contageous()))
-        self.txtDaysContagious.place(x=300,y=450)
+        self.txtDaysContagious.place(x=300+self.xadd,y=450)
 
         #mask
 
         self.lblMaskIntroducedTimeline = tk.Label(self, text="Mask Timeline")
-        self.lblMaskIntroducedTimeline.place(x=180,y=500)
+        self.lblMaskIntroducedTimeline.place(x=180+self.xadd,y=500)
 
         self.txtMaskIntroducedTimeline = tk.Text(self, height =1, width = 25)
         self.txtMaskIntroducedTimeline.insert("end",str(self.conf.get_mask_introduced_timeline()))
-        self.txtMaskIntroducedTimeline.place(x=300,y=500)
+        self.txtMaskIntroducedTimeline.place(x=300+self.xadd,y=500)
 
         self.lblMaskUsuageEffectiveness = tk.Label(self, text="Mask Usuage Effectiveness")
-        self.lblMaskUsuageEffectiveness.place(x=95,y=550)
+        self.lblMaskUsuageEffectiveness.place(x=95+self.xadd,y=550)
 
         self.sdrMaskUsuageEffectiveness = tk.Scale(self, from_=0, to=100, orient=tk.HORIZONTAL, length=130, showvalue=0, resolution=0.1,command=self.set_valueMaskUsuageEffectiveness)
         self.sdrMaskUsuageEffectiveness.set(self.conf.get_mask_usage_effectiveness())
-        self.sdrMaskUsuageEffectiveness.place(x=300,y=550)
+        self.sdrMaskUsuageEffectiveness.place(x=300+self.xadd,y=550)
 
         self.lblMaskUsuageEffectivenessVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =4)
-        self.lblMaskUsuageEffectivenessVal.place(x=450,y=550)
+        self.lblMaskUsuageEffectivenessVal.place(x=450+self.xadd,y=550)
 
         self.lblMaskUsuagePercentage = tk.Label(self, text="Mask Usage Percentage")
-        self.lblMaskUsuagePercentage.place(x=115,y=600)
+        self.lblMaskUsuagePercentage.place(x=115+self.xadd,y=600)
 
         self.sdrMaskUsuagePercentage = tk.Scale(self, from_=0, to=100, orient=tk.HORIZONTAL, length=130, showvalue=0, resolution=0.1,command=self.set_valueMaskUsuagePercentage)
         self.sdrMaskUsuagePercentage.set(self.conf.get_mask_usage_percentage())
-        self.sdrMaskUsuagePercentage.place(x=300,y=600)
+        self.sdrMaskUsuagePercentage.place(x=300+self.xadd,y=600)
 
         self.lblMaskUsuagePercentageVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =4)
-        self.lblMaskUsuagePercentageVal.place(x=450,y=600)
+        self.lblMaskUsuagePercentageVal.place(x=450+self.xadd,y=600)
 
         #quarantine
 
         self.lblQuarantineIntroducedTimeline = tk.Label(self, text = "Quarantine Timeline")
-        self.lblQuarantineIntroducedTimeline.place(x=100+500,y=250)
+        self.lblQuarantineIntroducedTimeline.place(x=100+500+self.xadd,y=250)
 
         self.txtQuarantineIntroducedTimeline = tk.Text(self, height =1, width = 25)
         self.txtQuarantineIntroducedTimeline.insert("end",str(self.conf.get_quarantine_introduced_timeline()))
-        self.txtQuarantineIntroducedTimeline.place(x=250+500,y=250)
+        self.txtQuarantineIntroducedTimeline.place(x=250+500+self.xadd,y=250)
 
         self.lblQuarantineEffectiveness = tk.Label(self, text="Quarantine Effectiveness")
-        self.lblQuarantineEffectiveness.place(x=70+500,y=300)
+        self.lblQuarantineEffectiveness.place(x=70+500+self.xadd,y=300)
 
         self.sdrQuarantineUsuageEffectiveness = tk.Scale(self, from_=0, to=100, orient=tk.HORIZONTAL, length=130, showvalue=0, resolution=0.1,command=self.set_valueQuarantineUsuageEffectiveness)
         self.sdrQuarantineUsuageEffectiveness.set(self.conf.get_qurantine_effectiveness())
-        self.sdrQuarantineUsuageEffectiveness.place(x=250+500,y=300)
+        self.sdrQuarantineUsuageEffectiveness.place(x=250+500+self.xadd,y=300)
 
         self.lblQuarantineUsuageEffectivenessVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =4)
-        self.lblQuarantineUsuageEffectivenessVal.place(x=400+500,y=300)
+        self.lblQuarantineUsuageEffectivenessVal.place(x=400+500+self.xadd,y=300)
 
         self.lblQuarantinePercentage = tk.Label(self, text="Quarantining Percentage")
-        self.lblQuarantinePercentage.place(x=70+500,y=350)
+        self.lblQuarantinePercentage.place(x=70+500+self.xadd,y=350)
 
         self.sdrQuarantinePercentage = tk.Scale(self, from_=0, to=100, orient=tk.HORIZONTAL, length=130, showvalue=0, resolution=0.1,command=self.set_valueQuarantinePercentage)
         self.sdrQuarantinePercentage.set(self.conf.get_qurantine_usage_percentage())
-        self.sdrQuarantinePercentage.place(x=250+500,y=350)
+        self.sdrQuarantinePercentage.place(x=250+500+self.xadd,y=350)
 
         self.lblQuarantinePercentageVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =4)
-        self.lblQuarantinePercentageVal.place(x=400+500,y=350)
+        self.lblQuarantinePercentageVal.place(x=400+500+self.xadd,y=350)
 
         #vaccine
 
         self.lblVaccineIntroducedTimeline = tk.Label(self, text="Vaccine Timeline")
-        self.lblVaccineIntroducedTimeline.place(x=115+500,y=400)
+        self.lblVaccineIntroducedTimeline.place(x=115+500+self.xadd,y=400)
 
         self.txtVaccineIntroducedTimeline = tk.Text(self, height =1, width = 25)
         self.txtVaccineIntroducedTimeline.insert("end",str(self.conf.get_vaccine_introduced_timeline()))
-        self.txtVaccineIntroducedTimeline.place(x=250+500,y=400)
+        self.txtVaccineIntroducedTimeline.place(x=250+500+self.xadd,y=400)
 
         self.lblVaccineEffectiveness = tk.Label(self, text="Vaccine Effectiveness")
-        self.lblVaccineEffectiveness.place(x=85+500,y=450)
+        self.lblVaccineEffectiveness.place(x=85+500+self.xadd,y=450)
 
         self.sdrVaccineEffectiveness = tk.Scale(self, from_=0, to=100, orient=tk.HORIZONTAL, length=130, showvalue=0, resolution=0.1,command=self.set_valueVaccineEffectiveness)
         self.sdrVaccineEffectiveness.set(self.conf.get_vaccine_effectiveness())
-        self.sdrVaccineEffectiveness.place(x=250+500,y=450)
+        self.sdrVaccineEffectiveness.place(x=250+500+self.xadd,y=450)
 
         self.lblVaccineEffectivenessVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =4)
-        self.lblVaccineEffectivenessVal.place(x=400+500,y=450)
+        self.lblVaccineEffectivenessVal.place(x=400+500+self.xadd,y=450)
 
         self.lblVaccinePercentage = tk.Label(self, text="Vaccine Percentage")
-        self.lblVaccinePercentage.place(x=100+500,y=500)
+        self.lblVaccinePercentage.place(x=100+500+self.xadd,y=500)
 
         self.sdrVaccinePercentage = tk.Scale(self, from_=0, to=100, orient=tk.HORIZONTAL, length=130, showvalue=0, resolution=0.1,command=self.set_valueVaccinePercentage)
         self.sdrVaccinePercentage.set(self.conf.get_vaccine_usage_percentage())
-        self.sdrVaccinePercentage.place(x=250+500,y=500)
+        self.sdrVaccinePercentage.place(x=250+500+self.xadd,y=500)
 
         self.lblVaccinePercentageVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =4)
-        self.lblVaccinePercentageVal.place(x=400+500,y=500)
+        self.lblVaccinePercentageVal.place(x=400+500+self.xadd,y=500)
 
         self.btnSet = ttk.Button(self, text="Set",command = self.setButtonOnClick)
-        self.btnSet.place(x=470,y=650)
+        self.btnSet.place(x=470+self.xadd,y=650)
 
     def on_change(self,index,value,op):
         self.conf.set_property_name(self.comboBoxVirus.get())
@@ -891,7 +892,21 @@ class StartPanel(tk.Frame):
         
         self.lineCanvas.draw()
         self.lineCanvas2.draw()
-
+        #Comment or uncomment for output in print terminal
+        if(self.time==30):
+            print(self.time,Total_cases)
+        elif(self.time==50):
+            print(self.time,Total_cases)
+        elif(self.time==100):
+            print(self.time,Total_cases)
+        elif(self.time==150):
+            print(self.time,Total_cases)
+        elif(self.time==200):
+            print(self.time,Total_cases)
+        elif(self.time==250):
+            print(self.time,Total_cases)
+        elif(self.time==300):
+            print(self.time,Total_cases)
         
         
         self.lgCanvas.draw()
