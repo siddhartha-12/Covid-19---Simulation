@@ -31,9 +31,9 @@ class SimalationData():
         for i in infect_index:
             count +=1
             self.population_set[i].set_infected(True)
-            self.population_set[i].set_can_infect(self.config.get_r_factor())
+            self.population_set[i].set_can_infect(np.random.randint(0,self.config.get_r_factor()+10))
             self.config.update_to_infect()
-            self.population_set[i].set_recoveryDays(np.random.randint(self.config.get_days_contageous(),self.config.get_days_contageous()+30))
+            self.population_set[i].set_recoveryDays(np.random.randint(self.config.get_days_contageous()//10,self.config.get_days_contageous()+30))
         return count 
         
     def initializePersonDataset(self,popualation: int)-> list:
