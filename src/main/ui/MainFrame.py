@@ -22,6 +22,7 @@ from Config import Config
 from SimulationData import SimalationData
 from DataUtil import DataUtil
 from PersonUtil import PersonUtil
+from ConfigUtil import ConfigUtil
 
 LARGE_FONT= ("Verdana", 25)
 style.use("ggplot")
@@ -96,6 +97,7 @@ class ConfigurationPanel(tk.Frame):
         self.label = tk.Label(self, text="Configuration", font=LARGE_FONT)
         self.label.pack(pady=10,padx=10)
         self.pop=0
+        self.cutil = ConfigUtil.get_instance()
 
         
         self.btnBack = ttk.Button(self, text = "<< back", command=lambda: controller.show_frame(DefaultPanel))
@@ -106,7 +108,8 @@ class ConfigurationPanel(tk.Frame):
 
         self.combovar= StringVar()
         self.combovar.trace('w',self.on_change)
-        self.comboBoxVirus = ttk.Combobox(self, textvar=self.combovar, state = 'readonly', values = ['COVID19','Sars','Mers','second virus'])
+        list_disease = self.cutil.get_all_sections()
+        self.comboBoxVirus = ttk.Combobox(self, textvar=self.combovar, state = 'readonly', values = list_disease[1:])
         self.comboBoxVirus.place(x=500, y=150)
         self.comboBoxVirus.current(0)
         self.set_virus_properties()
@@ -465,10 +468,9 @@ class StartPanel(tk.Frame):
 
         self.fig = Figure()
         self.ax = self.fig.add_subplot(111)
-       
         self.ax.set_title('Time series graph')
         self.ax.set_xlabel('Time')
-        self.ax.set_ylabel('No of people')
+        self.ax.set_ylabel('# People')
         self.ax.set_xlim(0,self.xlimit)
         self.ax.set_ylim(0,self.ylimit)
         
@@ -480,15 +482,14 @@ class StartPanel(tk.Frame):
         self.lines_vaccine = self.ax.plot([],[],'lime')[0]
 
         self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
-        self.lineCanvas.get_tk_widget().place(x=50,y=420, width = 500,height = 300)
+        self.lineCanvas.get_tk_widget().place(x=70,y=420, width = 400,height = 300)
 
 #----------- 2nd graph --------------------
         self.fig2 = Figure()
         self.ax2 = self.fig2.add_subplot(111)
-       
         self.ax2.set_title('Time series graph')
         self.ax2.set_xlabel('Time')
-        self.ax2.set_ylabel('No of people')
+        self.ax2.set_ylabel('Growth Rate')
         self.ax2.set_xlim(0,self.xlimit)
         self.ax2.set_ylim(0,self.ylimit)
 
@@ -498,18 +499,15 @@ class StartPanel(tk.Frame):
         self.lines_dead = self.ax2.plot([],[],'black')[0]
 
         self.lineCanvas2 = po.FigureCanvasTkAgg(self.fig2, master = self)
-        self.lineCanvas2.get_tk_widget().place(x=650,y=420, width = 500,height = 300)
+        self.lineCanvas2.get_tk_widget().place(x=650,y=420, width = 400,height = 300)
 
 #------------- log graph ---------------------
         self.fig_lg = Figure()
         self.ax_lg = self.fig_lg.add_subplot(111)
         self.ax_lg.set_title('Logarithmic graph')
         self.ax_lg.set_xlabel('Time')
-        self.ax_lg.set_ylabel('Log og no of people')
-        
-       
+        self.ax_lg.set_ylabel('Rate of Infection')
         self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
-
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
         self.lgCanvas.get_tk_widget().place(x=800,y=50, width = 500,height = 300)
         self.lgCanvas.draw()

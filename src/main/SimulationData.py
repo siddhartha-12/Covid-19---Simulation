@@ -10,7 +10,7 @@ class SimalationData():
         logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=logging.DEBUG)
         self.config = Config.get_instance()
         section = self.config.get_property_name()
-        if(section):
+        if(section==None):
             self.config.load_from_file(str(section))
 
     def getDataset(self)-> list:

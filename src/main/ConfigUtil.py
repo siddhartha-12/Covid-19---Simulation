@@ -58,8 +58,11 @@ class ConfigUtil:
             logging.info("Config file %s doesn't exist.")
             # print("False")
             return False
+    def get_all_sections(self)->list:
+        return self.cp.sections()
 
 if __name__ == "__main__":
     cu =  ConfigUtil()
     print(cu.get_value("COVID19","name"))
-    print(cu.cp.sections())
+    
+    print(cu.get_all_sections())
