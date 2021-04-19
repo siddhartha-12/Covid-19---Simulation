@@ -462,14 +462,18 @@ class StartPanel(tk.Frame):
         self.checkquarantine = tk.Checkbutton(self,text='Quarantine usage', var=self.vaccine_box,onvalue=1,offvalue=0)
         # self.checkquarantine.place(x=950,y=290)
 
+
+#---------------- back and simulate buttons ---------------
         btnBack = ttk.Button(self, text = "<< back", command=self.backOnClick)
         btnBack.place(x=20, y=20)
 
         btnSim = ttk.Button(self, text = "Simulate", command=self.startSim)
         btnSim.place(x=950+300, y=330+50)
 
-        self.canvass = tk.Canvas(self,height=300, width = 500,background='white')
-        self.canvass.place(x=200,y=50)
+#---------------- Simulation window  ----------------------
+
+        self.canvass = tk.Canvas(self,height=600, width = 600,background='white')
+        self.canvass.place(x=50,y=50)
 
         self.fig = Figure()
         self.ax = self.fig.add_subplot(111)
@@ -484,7 +488,7 @@ class StartPanel(tk.Frame):
         self.lines_vaccine = self.ax.plot([],[],'lime')[0]
 
         self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
-        self.lineCanvas.get_tk_widget().place(x=70,y=420, width = 400,height = 300)
+        self.lineCanvas.get_tk_widget().place(x=70,y=750, width = 400,height = 300)
 
 #----------- 2nd graph --------------------
         self.fig2 = Figure()
@@ -514,7 +518,7 @@ class StartPanel(tk.Frame):
         self.lines_dead_lg = self.ax_lg.plot([],[],'black')[0]
 
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
-        self.lgCanvas.get_tk_widget().place(x=800,y=50, width = 500,height = 300)
+        self.lgCanvas.get_tk_widget().place(x=900,y=50, width = 500,height = 300)
         self.lgCanvas.draw()
 
 
@@ -548,7 +552,7 @@ class StartPanel(tk.Frame):
         self.lines_vaccine = self.ax.plot([],[],'lime')[0]
 
         self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
-        self.lineCanvas.get_tk_widget().place(x=50,y=420, width = 500,height = 300)
+        self.lineCanvas.get_tk_widget().place(x=50,y=750, width = 500,height = 300)
 
 #----------- 2nd graph --------------------
         self.fig2 = Figure()
@@ -581,7 +585,7 @@ class StartPanel(tk.Frame):
         self.lines_dead_lg = self.ax_lg.plot([],[],'black')[0]
 
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
-        self.lgCanvas.get_tk_widget().place(x=800,y=50, width = 500,height = 300)
+        self.lgCanvas.get_tk_widget().place(x=900,y=50, width = 500,height = 300)
         self.lgCanvas.draw()
         self.cont.show_frame(DefaultPanel)
 
@@ -608,8 +612,8 @@ class StartPanel(tk.Frame):
         self.ylimit = self.cu.get_population()
         self.logYlimit = self.cu.get_population()/2
 
-        self.canvass = tk.Canvas(self,height=300, width = 500,background='white')
-        self.canvass.place(x=200,y=50)
+        self.canvass = tk.Canvas(self,height=600, width = 600,background='white')
+        self.canvass.place(x=50,y=50)
 
 
         #--------- time series graph ------------
@@ -630,7 +634,7 @@ class StartPanel(tk.Frame):
         self.lines_vaccine = self.ax.plot([],[],'lime')[0]
 
         self.lineCanvas = po.FigureCanvasTkAgg(self.fig, master = self)
-        self.lineCanvas.get_tk_widget().place(x=50,y=420, width = 500,height = 300)
+        self.lineCanvas.get_tk_widget().place(x=50,y=750, width = 500,height = 300)
 
     #----------- 2nd graph --------------------
         self.fig2 = Figure()
@@ -665,7 +669,7 @@ class StartPanel(tk.Frame):
         self.lines_dead_lg = self.ax_lg.plot([],[],'black')[0]
 
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
-        self.lgCanvas.get_tk_widget().place(x=800,y=50, width = 500,height = 300)
+        self.lgCanvas.get_tk_widget().place(x=900,y=50, width = 500,height = 300)
 
 
         self.move_oval()
@@ -751,10 +755,10 @@ class StartPanel(tk.Frame):
         counts  = self.du.getTotalCountAll(self.dataset)
         
         self.timer_label.config(text="Days : " + str(int(self.time)))
-        self.timer_label.place(x=70,y=80)
+        self.timer_label.place(x=750,y=80)
         Total_cases = counts["Infected"] + counts["Recover"] + counts["Dead"]
         self.no_of_infected.config(text="Total Cases  :"+str(Total_cases)+"\nNew Cases  :" +str(self.new_infect)+"\nActive Cases  :" +str(counts["Infected"]) +"\nSuper Spreader : " + str(counts["Super"]) + "\nRecovered  :" +str(counts["Recover"]) + "\nDeceased  :" +str(counts["Dead"]) +"\nHealthy : " + str(counts["Healthy"]) + "\nMask Usage  :" +str(counts["Mask"]) + "\nQuarantined  :" +str(counts["Quarantine"]) +"\nVaccinated : " + str(counts["Vaccinate"]) +"\nPredicted more infection: " + str(int(self.cu.get_total_to_infect())) )
-        self.no_of_infected.place(x=0,y=100)
+        self.no_of_infected.place(x=680,y=100)
         for i in range(len(self.dataset)):
             if(self.dataset[i].get_infected()):
                 if(self.dataset[i].get_can_infect()>0):
@@ -847,6 +851,6 @@ class StartPanel(tk.Frame):
     
 
 window = DefaultFrame()
-window.geometry('1400x1500')
+window.geometry('1500x1500')
 window.resizable(True,True)
 window.mainloop()
