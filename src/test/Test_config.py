@@ -15,7 +15,6 @@ class ConfigClassTest(unittest.TestCase):
         self.assertTrue(self.conf)
 
     def testDefaultValues(self):
-        # self.assertTrue()
         self.assertTrue(self.conf.get_property_name() == None)
 
     def test_property_name(self):
@@ -103,8 +102,6 @@ class ConfigClassTest(unittest.TestCase):
         self.assertTrue(self.conf.get_vaccine_effectiveness()==(float(cu.get_value(disease_section,"vaccine_effectiveness"))))
         self.assertTrue(self.conf.get_vaccine_usage_percentage()==(float(cu.get_value(disease_section,"vaccinated_percentage"))))
      
-
-
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
