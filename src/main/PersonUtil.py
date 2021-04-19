@@ -72,8 +72,8 @@ class PersonUtil:
     #Method to check if the peson will recover from the disease or loose his life
     def updateDemiseOrRecovered(self, medical_history_scale):
         # How much vulnerable is the person to die based on past medical history
-        p_medical_history = float(medical_history_scale)/10
-        result_death = np.random.choice([True, False],1, p=[1-p_medical_history, p_medical_history])
+        p_medical_history = float(medical_history_scale)/50
+        result_death = np.random.choice([False, True],1, p=[1-p_medical_history, p_medical_history])
         return result_death[0]
 
     #Method to update if the mask status quo will change for the person
