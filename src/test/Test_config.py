@@ -4,6 +4,7 @@ import sys
 cwd = os.getcwd()+"/src/main"
 sys.path.insert(1, cwd)
 from Config import Config
+from ConfigUtil import ConfigUtil
 
 class ConfigClassTest(unittest.TestCase):
 
@@ -80,6 +81,28 @@ class ConfigClassTest(unittest.TestCase):
     def test_total_to_infect(self):
         self.conf.set_total_to_infect(10)
         self.assertTrue(self.conf.get_total_to_infect()==10)
+
+    def test_load_from_file(self):
+        factor = 1
+        cu = ConfigUtil.get_instance()
+        self.conf.load_from_file("COVID19")
+        disease_section = "COVID19"
+        self.assertTrue(self.conf.get_property_name()==(disease_section))
+        self.assertTrue(self.conf.get_population()==(int(cu.get_value("SIMULATION","population"))))
+        self.assertTrue(self.conf.get_initial_infected_percentage()==(int(cu.get_value("SIMULATION","initial_infected_percentage"))))
+        self.assertTrue(self.conf.get_r_factor()==(int(cu.get_value(disease_section,"r_factor"))))
+        self.assertTrue(self.conf.get_k_factor()==(float(cu.get_value(disease_section,"k_factor"))))
+        self.assertTrue(self.conf.get_days_contageous()==(int(cu.get_value(disease_section,"days_contageous"))*factor))
+        self.assertTrue(self.conf.get_mask_introduced_timeline()==(int(cu.get_value(disease_section,"mask_timeline"))*factor))
+        self.assertTrue(self.conf.get_mask_usage_effectiveness()==(float(cu.get_value(disease_section,"mask_usuage_effectiveness"))))
+        self.assertTrue(self.conf.get_mask_usage_percentage()==(float(cu.get_value(disease_section,"mask_usuage_percentage"))))
+        self.assertTrue(self.conf.get_quarantine_introduced_timeline()==(int(cu.get_value(disease_section,"quarantine_timeline"))*factor))
+        self.assertTrue(self.conf.get_qurantine_effectiveness()==(float(cu.get_value(disease_section,"qurantine_effectiveness"))))
+        self.assertTrue(self.conf.get_qurantine_usage_percentage()==(float(cu.get_value(disease_section,"qurantine_percentage"))))
+        self.assertTrue(self.conf.get_vaccine_introduced_timeline()==(int(cu.get_value(disease_section,"vaccine_timeline"))*factor))
+        self.assertTrue(self.conf.get_vaccine_effectiveness()==(float(cu.get_value(disease_section,"vaccine_effectiveness"))))
+        self.assertTrue(self.conf.get_vaccine_usage_percentage()==(float(cu.get_value(disease_section,"vaccinated_percentage"))))
+     
 
 
 if __name__ == "__main__":
