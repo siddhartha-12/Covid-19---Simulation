@@ -9,6 +9,7 @@ from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from matplotlib import style
 
+from math import log2,log
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -354,6 +355,10 @@ class StartPanel(tk.Frame):
         self.vaccine_log = list()
         self.time_log = list()
 
+        self.infected_lg_log = list()
+        self.recovered_lg_log = list()
+        self.deceased_lg_log = list()
+
         self.xlimit = 100
         self.ylimit = 0
 
@@ -473,9 +478,6 @@ class StartPanel(tk.Frame):
         self.ax.set_ylabel('# People')
         self.ax.set_xlim(0,self.xlimit)
         self.ax.set_ylim(0,self.ylimit)
-        
-       
-        
         self.lines_healthy=self.ax.plot([],[],'b')[0] 
         self.lines_mask = self.ax.plot([],[],'pink')[0]
         self.lines_quarantine = self.ax.plot([],[],'cyan')[0]
@@ -491,7 +493,7 @@ class StartPanel(tk.Frame):
         self.ax2.set_xlabel('Time')
         self.ax2.set_ylabel('# People')
         self.ax2.set_xlim(0,self.xlimit)
-        self.ax2.set_ylim(0,self.ylimit)
+        self.ax2.set_ylim(0,50)
 
         self.lines_infected = self.ax2.plot([],[],'r')[0]
         self.lines_super = self.ax2.plot([],[],'yellow')[0]
@@ -507,7 +509,10 @@ class StartPanel(tk.Frame):
         self.ax_lg.set_title('Logarithmic graph')
         self.ax_lg.set_xlabel('Time')
         self.ax_lg.set_ylabel('Rate of Infection')
-        self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
+        self.lines_infected_lg = self.ax_lg.plot([],[],'r')[0]
+        self.lines_recovered_lg = self.ax_lg.plot([],[],'g')[0]
+        self.lines_dead_lg = self.ax_lg.plot([],[],'black')[0]
+
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
         self.lgCanvas.get_tk_widget().place(x=800,y=50, width = 500,height = 300)
         self.lgCanvas.draw()
@@ -553,7 +558,7 @@ class StartPanel(tk.Frame):
         self.ax2.set_xlabel('Time')
         self.ax2.set_ylabel('# People')
         self.ax2.set_xlim(0,self.xlimit)
-        self.ax2.set_ylim(0,self.ylimit)
+        self.ax2.set_ylim(0,self.logYlimit)
 
         self.lines_infected = self.ax2.plot([],[],'r')[0]
         self.lines_super = self.ax2.plot([],[],'yellow')[0]
@@ -571,7 +576,9 @@ class StartPanel(tk.Frame):
         self.ax_lg.set_ylabel('Growth Rate')
         
        
-        self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
+        self.lines_infected_lg = self.ax_lg.plot([],[],'r')[0]
+        self.lines_recovered_lg = self.ax_lg.plot([],[],'g')[0]
+        self.lines_dead_lg = self.ax_lg.plot([],[],'black')[0]
 
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
         self.lgCanvas.get_tk_widget().place(x=800,y=50, width = 500,height = 300)
@@ -599,6 +606,7 @@ class StartPanel(tk.Frame):
         self.time = 0
         self.infected_location_dict = dict()
         self.ylimit = self.cu.get_population()
+        self.logYlimit = self.cu.get_population()/2
 
         self.canvass = tk.Canvas(self,height=300, width = 500,background='white')
         self.canvass.place(x=200,y=50)
@@ -632,7 +640,7 @@ class StartPanel(tk.Frame):
         self.ax2.set_xlabel('Time')
         self.ax2.set_ylabel('No of people')
         self.ax2.set_xlim(0,self.xlimit)
-        self.ax2.set_ylim(0,self.ylimit)
+        self.ax2.set_ylim(0,self.logYlimit)
 
         self.lines_infected = self.ax2.plot([],[],'r')[0]
         self.lines_super = self.ax2.plot([],[],'yellow')[0]
@@ -648,11 +656,16 @@ class StartPanel(tk.Frame):
         self.ax_lg = self.fig_lg.add_subplot(111)
         self.ax_lg.set_title('Logarithmic graph')
         self.ax_lg.set_xlabel('Time')
-        self.ax_lg.set_ylabel('Log og no of people')
-        self.lines_lg = self.ax_lg.plot([],[],'r',label ='Infected')[0]
+        self.ax_lg.set_ylabel('Growth Rate Log Graph')
+        self.ax_lg.set_xlim(0,self.xlimit)
+        self.ax_lg.set_ylim(0,np.log2(self.ylimit*4))
+       
+        self.lines_infected_lg = self.ax_lg.plot([],[],'r')[0]
+        self.lines_recovered_lg = self.ax_lg.plot([],[],'g')[0]
+        self.lines_dead_lg = self.ax_lg.plot([],[],'black')[0]
+
         self.lgCanvas = po.FigureCanvasTkAgg(self.fig_lg, master = self)
         self.lgCanvas.get_tk_widget().place(x=800,y=50, width = 500,height = 300)
-        self.lgCanvas.draw()
 
 
         self.move_oval()
@@ -700,6 +713,10 @@ class StartPanel(tk.Frame):
         self.quarantine_log = list()
         self.vaccine_log = list()
         self.time_log = list()
+
+        self.infected_lg_log = list()
+        self.recovered_lg_log = list()
+        self.deceased_lg_log = list()
     
     def cancel_lg(self):
         if self.lgCanvas is not None:
@@ -737,7 +754,8 @@ class StartPanel(tk.Frame):
         
         self.timer_label.config(text="Days : " + str(int(self.time)))
         self.timer_label.place(x=70,y=80)
-        self.no_of_infected.config(text="Infected  :" +str(counts["Infected"]) +"\nSuper Spreader : " + str(counts["Super"]) + "\nRecovered  :" +str(counts["Recover"]) + "\nDeceased  :" +str(counts["Dead"]) +"\nHealthy : " + str(counts["Healthy"]) + "\nMask Usage  :" +str(counts["Mask"]) + "\nQuarantined  :" +str(counts["Quarantine"]) +"\nVaccinated : " + str(counts["Vaccinate"]) +"\nPredicted more infection: " + str(int(self.cu.get_total_to_infect())) )
+        Total_cases = counts["Infected"] + counts["Recover"] + counts["Dead"]
+        self.no_of_infected.config(text="Total Cases  :"+str(Total_cases)+"\nActive Cases  :" +str(counts["Infected"]) +"\nSuper Spreader : " + str(counts["Super"]) + "\nRecovered  :" +str(counts["Recover"]) + "\nDeceased  :" +str(counts["Dead"]) +"\nHealthy : " + str(counts["Healthy"]) + "\nMask Usage  :" +str(counts["Mask"]) + "\nQuarantined  :" +str(counts["Quarantine"]) +"\nVaccinated : " + str(counts["Vaccinate"]) +"\nPredicted more infection: " + str(int(self.cu.get_total_to_infect())) )
         self.no_of_infected.place(x=0,y=100)
         for i in range(len(self.dataset)):
             if(self.dataset[i].get_infected()):
@@ -758,15 +776,30 @@ class StartPanel(tk.Frame):
             self.xlimit *=2
             self.ax_lg.set_xlim(0, self.xlimit)
             self.ax.set_xlim(0,self.xlimit)
+            self.ax2.set_xlim(0,self.xlimit)
+            
         
         self.infected_log.append(counts["Infected"])
         self.healthy_log.append(counts["Healthy"])
-        self.recovered_log.append(counts["Recovered"])
+        self.recovered_log.append(counts["Recover"])
         self.deceased_log.append(counts["Dead"])
         self.super_log.append(counts["Super"])
         self.mask_log.append(counts["Mask"])
         self.quarantine_log.append(counts["Quarantine"])
         self.vaccine_log.append(counts["Vaccinate"])
+        if counts["Infected"]!=0:
+            self.infected_lg_log.append(np.log2(counts["Infected"]))
+        else:
+            self.infected_lg_log.append(0)
+        if counts["Recover"]!=0:
+            self.recovered_lg_log.append(np.log2(counts["Recover"]))
+        else:
+            self.recovered_lg_log.append(0)
+        if counts["Dead"]!=0:
+            self.deceased_lg_log.append(np.log2(counts["Dead"]))
+        else:
+            self.deceased_lg_log.append(0)
+        
         self.time_log.append(self.time)
 
         if self.infected_box.get() ==1:
@@ -793,16 +826,24 @@ class StartPanel(tk.Frame):
         if self.vaccine_box.get() ==1:
             self.lines_vaccine.set_xdata(self.time_log)
             self.lines_vaccine.set_ydata(self.vaccine_log)
+
+        self.lines_infected_lg.set_xdata(self.time_log)
+        self.lines_infected_lg.set_ydata(self.infected_lg_log)
+
+        self.lines_recovered_lg.set_xdata(self.time_log)
+        self.lines_recovered_lg.set_ydata(self.recovered_lg_log)
+
+        self.lines_dead_lg.set_xdata(self.time_log)
+        self.lines_dead_lg.set_ydata(self.deceased_lg_log)
+        
         
         self.lineCanvas.draw()
         self.lineCanvas2.draw()
 
-        # self.ax_lg.plot(self.time_log,np.log(self.infected_log),'r')[0]
-        # self.ax.plot(np.arange(0,self.time),self.healthy_log,'g-')[0]
+        
         
         self.lgCanvas.draw()
-        self.pre_cou=counts
-        self.dots_graph=self.canvass.after(10,self.move_oval)
+        self.dots_graph=self.canvass.after(100,self.move_oval)
         
 
     
