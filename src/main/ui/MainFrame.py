@@ -780,7 +780,7 @@ class StartPanel(tk.Frame):
         
         self.infected_log.append(counts["Infected"])
         self.healthy_log.append(counts["Healthy"])
-        self.recovered_log.append(counts["Recovered"])
+        self.recovered_log.append(counts["Recover"])
         self.deceased_log.append(counts["Dead"])
         self.super_log.append(counts["Super"])
         self.mask_log.append(counts["Mask"])
@@ -790,8 +790,8 @@ class StartPanel(tk.Frame):
             self.infected_lg_log.append(np.log2(counts["Infected"]))
         else:
             self.infected_lg_log.append(0)
-        if counts["Recovered"]!=0:
-            self.recovered_lg_log.append(np.log2(counts["Recovered"]))
+        if counts["Recover"]!=0:
+            self.recovered_lg_log.append(np.log2(counts["Recover"]))
         else:
             self.recovered_lg_log.append(0)
         if counts["Dead"]!=0:
