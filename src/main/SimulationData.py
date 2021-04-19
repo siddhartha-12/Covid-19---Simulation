@@ -27,12 +27,15 @@ class SimalationData():
     def infect_initial(self):
         number_to_infect = int(float(self.config.get_population()) * float(self.config.get_initial_infected_percentage())/100)
         infect_index = np.random.choice(int(self.config.get_population()),number_to_infect, replace=True)
+        count = 0
         for i in infect_index:
+            count +=1
             self.population_set[i].set_infected(True)
             self.population_set[i].set_can_infect(self.config.get_r_factor())
             self.config.update_to_infect()
             self.population_set[i].set_recoveryDays(np.random.randint(self.config.get_days_contageous(),self.config.get_days_contageous()+30))
-
+        return count 
+        
     def initializePersonDataset(self,popualation: int)-> list:
         personDataset = list()
         for i in range(popualation):
