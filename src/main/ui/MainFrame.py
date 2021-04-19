@@ -768,7 +768,7 @@ class StartPanel(tk.Frame):
             if(self.dataset[i].get_deceased()):
                 c="black"
             
-            self.canvass.create_oval(self.dataset[i].get_x()/2-4,self.dataset[i].get_y()/3-4,self.dataset[i].get_x()/2+4,self.dataset[i].get_y()/3+4, fill = c)
+            self.canvass.create_oval(self.dataset[i].get_x()/2-2,self.dataset[i].get_y()/3-2,self.dataset[i].get_x()/2+2,self.dataset[i].get_y()/3+2, fill = c)
         
         if self.time == self.xlimit:
             self.xlimit *=2
