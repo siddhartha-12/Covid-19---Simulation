@@ -349,6 +349,7 @@ class StartPanel(tk.Frame):
         self.lineCanvas2 = None
         self.lgCanvas = None
         self.time =0
+        self.cu = Config.get_instance()
 
  #---------------- lists to plot -------------------
 
@@ -372,7 +373,7 @@ class StartPanel(tk.Frame):
         self.logYlimit = 0
 
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Simulation", font=LARGE_FONT)
+        label = tk.Label(self, text="Simulation "+self.cu.get_property_name(), font=LARGE_FONT)
         label.pack(pady=10,padx=10)
         
         self.timer_label = tk.Label(self, text="")
@@ -622,6 +623,8 @@ class StartPanel(tk.Frame):
         self.lgCanvas.draw()
         self.cont.show_frame(DefaultPanel)
 
+#------------------ simulation button functionality ---------------------
+
     def startSim(self):
 
         self.canvass.delete('all')
@@ -731,6 +734,8 @@ class StartPanel(tk.Frame):
         self.add_infected_to_dict(x+1, y-1, id)
         self.add_infected_to_dict(x+1, y, id)
         self.add_infected_to_dict(x+1, y+1, id)
+
+#------------- stopping the simulation ---------------------
 
     def cancel_oval(self):
         if self.dots_graph is not None:
