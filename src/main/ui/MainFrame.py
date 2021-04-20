@@ -349,7 +349,9 @@ class StartPanel(tk.Frame):
         self.lineCanvas2 = None
         self.lgCanvas = None
         self.time =0
-       
+
+ #---------------- lists to plot -------------------
+
         self.infected_log = list()
         self.total_log = list()
         self.healthy_log = list()
@@ -548,7 +550,9 @@ class StartPanel(tk.Frame):
 
 
         self.canvass.delete('all')
-        
+
+ #---------------  back button ------------------
+
     def backOnClick(self):
         
         self.fig.clear(True)
