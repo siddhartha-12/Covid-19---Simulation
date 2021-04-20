@@ -81,6 +81,8 @@ class DefaultPanel(tk.Frame):
         # label0 = tk.Label(self, text="", font=LARGE_FONT)
         # label0.pack(pady=200,padx=200)
 
+#------------ config and window buttons -------------
+
         btnConfig = ttk.Button(self, text="Set Configuration",command=lambda: controller.show_frame(ConfigurationPanel),width=20)
         btnConfig.place(x=600,y=200)
 
