@@ -168,7 +168,7 @@ class ConfigurationPanel(tk.Frame):
         self.txtDaysContagious.insert("end",str(self.conf.get_days_contageous()))
         self.txtDaysContagious.place(x=300+self.xadd,y=450)
 
-        #mask
+#------------------------- mask -------------------------
 
         self.lblMaskIntroducedTimeline = tk.Label(self, text="Mask Timeline")
         self.lblMaskIntroducedTimeline.place(x=180+self.xadd,y=500)
@@ -197,8 +197,7 @@ class ConfigurationPanel(tk.Frame):
         self.lblMaskUsuagePercentageVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =4)
         self.lblMaskUsuagePercentageVal.place(x=450+self.xadd,y=600)
 
-        #quarantine
-
+#------------------------- quarantine -------------------------
         self.lblQuarantineIntroducedTimeline = tk.Label(self, text = "Quarantine Timeline")
         self.lblQuarantineIntroducedTimeline.place(x=100+500+self.xadd,y=250)
 
@@ -226,8 +225,7 @@ class ConfigurationPanel(tk.Frame):
         self.lblQuarantinePercentageVal = tk.Label(self,text=self.sdrRFactor.get(), height =1, width =4)
         self.lblQuarantinePercentageVal.place(x=400+500+self.xadd,y=350)
 
-        #vaccine
-
+#------------------------- vaccine -------------------------
         self.lblVaccineIntroducedTimeline = tk.Label(self, text="Vaccine Timeline")
         self.lblVaccineIntroducedTimeline.place(x=115+500+self.xadd,y=400)
 
@@ -287,6 +285,8 @@ class ConfigurationPanel(tk.Frame):
     def set_valueVaccinePercentage(self,v):
         self.lblVaccinePercentageVal.config(text=v+'%')
         #print(self.txtVaccineIntroducedTimeline.get(1.0,"end-1c"))
+
+#---------------------- changing config values -----------------
 
     def setButtonOnClick(self):
         conf = Config.get_instance()
