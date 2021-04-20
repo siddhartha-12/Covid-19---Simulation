@@ -113,6 +113,9 @@ class ConfigurationPanel(tk.Frame):
         self.lblVirusType = tk.Label(self, text="Select Virus")
         self.lblVirusType.place(x=400+self.xadd, y=150)
 
+
+#---------------- combobox to select virus -----------------------
+
         self.combovar= StringVar()
         self.combovar.trace('w',self.on_change)
         list_disease = self.cutil.get_all_sections()
