@@ -1,8 +1,6 @@
 COVID-19 Simulation
 Prepared for: 
 PSA Final Project – INFO 6205 Spring 2021
-
- 
 Prepared by:
 Siddhartha Raju (001084614)
 Gautham Rajsimha Pulipati (001572432)
@@ -212,41 +210,6 @@ Performance:
 Time Complexity : The alogorithm worst case complexity is O(N*T) where N is the number of people and T is the time the simulation is run. 
 Space Complexity : The algorithm complexity is O(N+T) where N is the number people to simulate and T is time the simulation is run. Additional T value is needed to store the state of N at time T for plotting graphs
 Simulation:
-
-
-
-
-
-
-CONCLUSION 
-
-
-
- 
-UNIT TESTING
-1)	Test_Config.py
-
- 
-2)	Test_ConfigUtil.py
-
- 
-3)	Test_DataUtil.py
-
- 
-
-4)	Test_person.py
-
- 
-
-
-
-5)	Test_PersonUtil.py
-
- 
-
-6)	Test_SimulationData.py
-
- 
 
 REREFENCES
 1) https://www.doh.wa.gov/Portals/1/Documents/1600/coronavirus/WearAClothFaceCovering.pdf
