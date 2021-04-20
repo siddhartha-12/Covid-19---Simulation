@@ -373,8 +373,8 @@ class StartPanel(tk.Frame):
         self.logYlimit = 0
 
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Simulation "+self.cu.get_property_name(), font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        self.label = tk.Label(self, text="Simulation "+self.cu.get_property_name(), font=LARGE_FONT)
+        self.label.pack(pady=10,padx=10)
         
         self.timer_label = tk.Label(self, text="")
         self.timer_label.place(x=200,y=200)
@@ -650,6 +650,8 @@ class StartPanel(tk.Frame):
 
         self.canvass = tk.Canvas(self,height=350, width = 600,background='white')
         self.canvass.place(x=50,y=70)
+
+        self.label.config(text="Simulation "+self.cu.get_property_name())
         #self.img = img = tk.PhotoImage(file =cwd+"/ui/img.png")
         #self.canvass.create_image(100,100,image =self.img, anchor ="nw")
 
