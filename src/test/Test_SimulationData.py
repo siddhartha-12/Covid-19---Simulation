@@ -14,16 +14,17 @@ class ConfigTest(unittest.TestCase):
         self.config.load_from_file("COVID19")
         self.data = None
     
+    # Test population count
     def testPopulationCount(self):
         population = self.config.get_population()
         self.data = self.sd.initializePersonDataset(population)
         self.assertTrue(len(self.data)==population)
     
+    # Test initially infected
     def testInfectInitial(self):
         self.sd.generateDataset()
         count = self.sd.infect_initial()
         self.assertTrue(count>0)
-
 
 if __name__ == "__main__":
 	unittest.main()
