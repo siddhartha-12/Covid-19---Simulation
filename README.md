@@ -1,4 +1,4 @@
-										COVID-19 Simulation
+								COVID-19 Simulation
 
 
 Prepared for: 
