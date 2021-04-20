@@ -9,17 +9,14 @@ from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from matplotlib import style
 matplotlib.rcParams['figure.autolayout'] = True
-
 from math import log2,log
 import numpy as np
 import matplotlib.pyplot as plt
 import time
 import asyncio
-
 from tkinter import StringVar
 import tkinter as tk
 from tkinter import ttk
-
 from Config import Config
 from SimulationData import SimalationData
 from DataUtil import DataUtil
@@ -75,7 +72,7 @@ class DefaultPanel(tk.Frame):
         
         self.img = tk.PhotoImage(file =cwd+"/images/background_image.png")
         bg_img = tk.Label(self,image=self.img)
-        bg_img.place(x=0,y=0)
+        bg_img.place(x=500,y=100)
         
         label = tk.Label(self, text="Virus Simulation", font=LARGE_FONT)
         label.pack(pady=30,padx=300, side ='top')
@@ -83,15 +80,11 @@ class DefaultPanel(tk.Frame):
         # label0 = tk.Label(self, text="", font=LARGE_FONT)
         # label0.pack(pady=200,padx=200)
 
-        btnConfig = ttk.Button(self, text="Set Configuration",command=lambda: controller.show_frame(ConfigurationPanel))
-        btnConfig.place(x=100,y=200)
+        btnConfig = ttk.Button(self, text="Set Configuration",command=lambda: controller.show_frame(ConfigurationPanel),width=20)
+        btnConfig.place(x=600,y=200)
 
-        btnStart = ttk.Button(self, text="Simulation Window",command=self.sim_window)
-        btnStart.place(x=100,y=250)
-
-        btnRender = ttk.Button(self, text="Render")
-        btnRender.place(x=100,y=300)
-
+        btnStart = ttk.Button(self, text="Simulation Window",command=self.sim_window,width=20)
+        btnStart.place(x=600,y=250)
         
     
     def sim_window(self):
@@ -482,7 +475,7 @@ class StartPanel(tk.Frame):
         btnBack = ttk.Button(self, text = "<< back", command=self.backOnClick)
         btnBack.place(x=20, y=10)
 
-        btnSim = ttk.Button(self, text = "Simulate", command=self.startSim)
+        btnSim = ttk.Button(self, text = "Click to Begin", command=self.startSim)
         btnSim.place(x=720, y=400)
 
         lblLegend_title = tk.Label(self, text ="Legend",font =MED_FONT)
