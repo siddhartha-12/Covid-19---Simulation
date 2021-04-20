@@ -70,6 +70,7 @@ class DefaultPanel(tk.Frame):
         container.grid_columnconfigure(0, weight=1)
         self.cont=controller
         
+#------------ image on first panel ---------------
         self.img = tk.PhotoImage(file =cwd+"/images/background_image.png")
         bg_img = tk.Label(self,image=self.img)
         bg_img.place(x=500,y=100)
