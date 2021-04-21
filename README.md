@@ -19,6 +19,8 @@ Instructions to setup:
 5) Navigate and open project folder PSA-Final-Project
 6) Execute the following command "python3 src/main/main.py" if python2 is also installed else run "python src/main/main.py"
   
+  
+  
 INTRODUCTION
 
 Simulation model of a disease projects how infectious diseases progress i.e how its components like transmission, spread and control of any infection grows over time and how it may strongly or weakly effect the dynamics of an epidemic. It also helps to inform public health interventions. 
