@@ -8,43 +8,17 @@ Siddhartha Raju (001084614)
 Gautham Rajsimha Pulipati (001572432)
 Naveen Kumar Buddhala (001582394)
  
-Table of Contents
-Introduction	3
-Aim	3
-Project Details	4
-File Structure:	4
-1.	Config.cfg	4
-2.	Config.py	4
-3.	ConfigUtil.py	4
-4.	Person.py	4
-5.	PersonUtil.py	5
-6.	DataUtil.py	5
-7.	SimulationData.py	5
-8.	Main.py	5
-9.	MainFrame.py	5
-Factors:	5
-1.	K factor	5
-2.	Mask	5
-3.	Quarantine	6
-4.	Vaccine	6
-5.	Days contagious	6
-6.	Initial infected percentage	6
-Implementation	6
-R factor	6
-Output	9
-Analysis	10
-Conclusion	10
-Unit Testing	11
-1)	Test_Config.py	11
-2)	Test_ConfigUtil.py	11
-3)	Test_DataUtil.py	12
-4)	Test_person.py	12
-5)	Test_PersonUtil.py	13
-6)	Test_SimulationData.py	13
-
-
-
- 
+Instructions to setup:
+1) Open Terminal
+2) Install python 3.7+
+3) git clone https://github.com/siddhartha-12/PSA-Final-Project.git
+4) Install following dependencies 
+   1) Install pip3 if not available.
+   2) pip3 install numpy
+   3) pip3 install matplotlib
+5) Navigate and open project folder PSA-Final-Project
+6) Execute the following command "python3 src/main/main.py" if python2 is also installed else run "python src/main/main.py"
+  
 INTRODUCTION
 
 Simulation model of a disease projects how infectious diseases progress i.e how its components like transmission, spread and control of any infection grows over time and how it may strongly or weakly effect the dynamics of an epidemic. It also helps to inform public health interventions. 
