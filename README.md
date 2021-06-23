@@ -1,14 +1,6 @@
-								COVID-19 Simulation
+								#COVID-19 Simulation
 
-
-Prepared for: 
-PSA Final Project – INFO 6205 Spring 2021
-Prepared by:
-Siddhartha Raju (001084614)
-Gautham Rajsimha Pulipati (001572432)
-Naveen Kumar Buddhala (001582394)
- 
-Instructions to setup:
+##Instructions to setup:
 1) Open Terminal
 2) Install python 3.7+
 3) git clone https://github.com/siddhartha-12/PSA-Final-Project.git
@@ -21,7 +13,7 @@ Instructions to setup:
   
   
   
-INTRODUCTION
+##INTRODUCTION
 
 Simulation model of a disease projects how infectious diseases progress i.e how its components like transmission, spread and control of any infection grows over time and how it may strongly or weakly effect the dynamics of an epidemic. It also helps to inform public health interventions. 
 Simulation model gives a pictoral or graphical way and it involves many factors, actors and components.
@@ -29,7 +21,7 @@ This is a new method of understanding and teaching about any disease outbreaks.
 This can save money,lives and time by allowing us to test it without even applying it to real world.
 Our simulation model fits for a particular pattern which is a general method involving R and K factor of the disease and several other factors of its spread.
 
-AIM
+##AIM
 
 Simulate the spread of a virus with respect to several factors and introducing various control measures later during the simulation and finally analysing the virus.   
 Simulations will take into account:
@@ -40,7 +32,7 @@ Simulations will take into account:
 •	Any barriers to entry (including quarantining) into the subject area.
 Building a User Interface to set several configuration values involved for respective diseases and simulating over a population and finally analysing through various graphs.
  
-PROJECT DETAILS
+##PROJECT DETAILS
 
 This disease simulation model is implemented in Python using TkInter and numpy library for probability association and matplotlib library for plotting the graph. The project consists of the following things
 
@@ -172,7 +164,7 @@ For getting the infection status, we consider all the factors responsible, such 
 For checking if the person will spread, we considered the K-factor, the main factor that is responsible for the COVID-19 infection rate, i.e. the super spreaders, which is about 0.1, which says 10% of the infected people are responsible for the overall 90% of the infections.
  
 
-OUTPUT
+##OUTPUT
  
 1- Entry Screen
 
@@ -182,14 +174,14 @@ OUTPUT
 3- Simulation Screen
 
 
-ANALYSIS
+##ANALYSIS
 
-Performance:
+##Performance:
 Time Complexity : The alogorithm worst case complexity is O(N*T) where N is the number of people and T is the time the simulation is run. 
 Space Complexity : The algorithm complexity is O(N+T) where N is the number people to simulate and T is time the simulation is run. Additional T value is needed to store the state of N at time T for plotting graphs
 Simulation:
 
-REREFENCES
+##REREFENCES
 1) https://www.doh.wa.gov/Portals/1/Documents/1600/coronavirus/WearAClothFaceCovering.pdf
 2) https://royalsociety.org/-/media/policy/projects/set-c/set-covid-19-R-estimates.pdf
 3) https://www.healthline.com/health/r-nought-reproduction-number#covid-19-r-0
