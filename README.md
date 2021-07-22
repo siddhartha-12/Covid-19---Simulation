@@ -3,12 +3,12 @@
 Instructions to setup:
 1) Open Terminal
 2) Install python 3.7+
-3) git clone https://github.com/siddhartha-12/PSA-Final-Project.git
+3) git clone https://github.com/siddhartha-12/Disease-Spread-Simulation
 4) Install following dependencies 
    1) Install pip3 if not available.
    2) pip3 install numpy
    3) pip3 install matplotlib
-5) Navigate and open project folder PSA-Final-Project
+5) Navigate and open project folder Disease-Spread-Simulation
 6) Execute the following command "python3 src/main/main.py" if python2 is also installed else run "python src/main/main.py"
   
   
